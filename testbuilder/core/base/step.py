@@ -1,4 +1,5 @@
 """Base step class"""
+from enum import Enum
 
 class BaseStepAttributeProxy:
     def resolve_attribute(self):
@@ -16,6 +17,11 @@ def check_attribute_for_init(attribute):
         return attribute
     raise TypeError("Attribute is expected to be of type 'BaseStepAttributeProxy'")
 
+class StepStatus(Enum):
+    PASSED = 1
+    FAILED = 2
+    NOT_STARTED = 3
+    IN_PROGRESS = 4
 
 class BaseStep:
     """
@@ -34,6 +40,8 @@ class BaseStep:
     action=None
     argument_1=None
     argument_2=None
+
+    status=StepStatus.NOT_STARTED
 
     def __init__(self, *args, **kwargs):
         self.action = check_attribute_for_init(kwargs.get("action"))
