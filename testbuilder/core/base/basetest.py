@@ -50,8 +50,10 @@ class TBBaseTest:
         self.first_step = first_step
         self.current_step = self.first_step
 
-    def load_step_interface(self, interface_name):
-        pass
+    def load_step_middleware(self, module_name):
+        mod = importlib.import_module(module_name)
+
+        self.step_middlewares.append(mod)
 
     
             
