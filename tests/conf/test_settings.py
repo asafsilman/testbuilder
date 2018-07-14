@@ -13,7 +13,7 @@ class TestSettings(unittest.TestCase):
 
     def test_settings(self):
         settings = Settings()
-        self.assertEqual(settings.TEST_VALUE, 5, "Failed to load setting module")
+        self.assertEqual(settings["TEST_VALUE"], 5, "Failed to load setting module")
         
     def tearDown(self):
         os.environ.setdefault("TESTBUILDER_SETTINGS_MODULE", self.prev_settings_module)

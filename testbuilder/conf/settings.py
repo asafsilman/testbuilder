@@ -34,3 +34,9 @@ class Settings:
             if setting.isupper():
                 setting_value = getattr(mod, setting)
                 setattr(self, setting, setting_value)
+
+    def __getitem__(self, name):
+        return getattr(self, name)
+
+    def __setitem__(self, name, value):
+        return setattr(self, name, value)

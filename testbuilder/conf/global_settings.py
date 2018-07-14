@@ -1,4 +1,5 @@
-"""Global configuration file with all default vaues
+"""
+Global configuration file with all default vaues
 """
 
 # List of registered inteface. 
