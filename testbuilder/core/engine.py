@@ -3,7 +3,7 @@ Testbuilder Engine class
 """
 
 from testbuilder.conf import settings
-from testbuilder.interfaces.baseinterface import TBBaseInterface
+from testbuilder.core.base.baseinterface import TBBaseInterface
 from testbuilder.core.exceptions import ImproperlyConfigured
 
 import importlib

@@ -1,6 +1,6 @@
 import unittest
 from testbuilder.core.engine import TBEngine
-from testbuilder.interfaces.baseinterface import TBBaseInterface
+from testbuilder.core.base.baseinterface import TBBaseInterface
 
 class TestTBEngine(unittest.TestCase):
     def setUp(self):
