@@ -36,4 +36,7 @@ class TBEngine:
 
         self.interfaces[interface_name] = interface()
 
+    def ready(self):
+        pass
+
         

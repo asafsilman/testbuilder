@@ -55,5 +55,8 @@ class TBBaseTest:
 
         self.step_middlewares.append(mod)
 
+    def ready(self):
+        pass
+
     
             
