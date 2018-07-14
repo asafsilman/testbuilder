@@ -1,5 +1,5 @@
 import unittest
-from testbuilder.core.base.step import TBBaseStep
+from testbuilder.core.base.basestep import TBBaseStep
 
 class TestTBBaseStep(unittest.TestCase):
 

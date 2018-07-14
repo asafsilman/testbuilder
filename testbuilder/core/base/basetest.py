@@ -1,8 +1,10 @@
 """Base test class"""
+import importlib
+
 from testbuilder.core.exceptions import (
     StepException
 )
-from testbuilder.core.base.step import TBBaseStep
+from testbuilder.core.base.basestep import TBBaseStep
 
 class TBBaseTest:
     """
@@ -48,7 +50,8 @@ class TBBaseTest:
         self.first_step = first_step
         self.current_step = self.first_step
 
-
+    def load_step_interface(self, interface_name):
+        pass
 
     
             

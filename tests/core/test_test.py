@@ -1,6 +1,6 @@
 import unittest
-from testbuilder.core.base.test import TBBaseTest
-from testbuilder.core.base.step import TBBaseStep
+from testbuilder.core.base.basetest import TBBaseTest
+from testbuilder.core.base.basestep import TBBaseStep
 
 from testbuilder.core.exceptions import StepException
 
