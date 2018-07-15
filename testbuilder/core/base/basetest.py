@@ -4,7 +4,7 @@ import importlib
 from testbuilder.core.exceptions import (
     StepException
 )
-from testbuilder.core.base.basestep import TBBaseStep
+from testbuilder.core.base.basestep import TBBaseStep, StepContext
 
 class TBBaseTest:
     """
@@ -26,8 +26,8 @@ class TBBaseTest:
     first_step=None
     current_step=None
 
-    step_middlewares = [] # an ordered collection of middlewares
-    results_middlewares = [] # an ordered collection of middlewares
+    middlewares = [] # an ordered collection of middlewares
+    interfaces = {}
 
     def __init__(self, *args, **kwargs):
         self.test_name = kwargs.get("test_name", "")
@@ -53,10 +53,20 @@ class TBBaseTest:
     def load_step_middleware(self, module_name):
         mod = importlib.import_module(module_name)
 
-        self.step_middlewares.append(mod)
+        self.middlewares.append(mod)
 
     def ready(self):
-        pass
+        """Checks the tests is ready to start execution
+
+        * Checks first_step is loaded
+        * Checks middlewares are not empty
+        * Checks interfaces are not empty
+        
+        Returns:
+            [type] -- [description]
+        """
+
+        return False
 
     
             
