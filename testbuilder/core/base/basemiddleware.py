@@ -1,6 +1,6 @@
 """Base Testbuilder Middleware class"""
 
-class TBMiddleware:
+class TBBaseMiddleware:
     def process_step(self, step_context, test):
         """Overwrite this function by middleware class
         

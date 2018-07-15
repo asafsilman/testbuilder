@@ -2,8 +2,11 @@
 import importlib
 
 from testbuilder.core.exceptions import (
-    StepException
+    StepException,
+    ImproperlyConfigured
 )
+from testbuilder.core.base.basemiddleware import TBBaseMiddleware
+from testbuilder.core.base.baseinterface import TBBaseInterface
 from testbuilder.core.base.basestep import TBBaseStep, StepContext
 
 class TBBaseTest:
@@ -50,23 +53,63 @@ class TBBaseTest:
         self.first_step = first_step
         self.current_step = self.first_step
 
-    def load_step_middleware(self, module_name):
-        mod = importlib.import_module(module_name)
+    def load_middleware(self, middleware):
+        """Creates and appends middleware to list of middleswares.
 
-        self.middlewares.append(mod)
+        Note that the order in which this function is called has a role in how the script may run.
+        
+        Arguments:
+            middleware {TBBaseMiddleware} -- Class of TBMiddlware, **not instance of**
+        """
+
+        if not issubclass(middleware, TBBaseMiddleware):
+            raise ImproperlyConfigured("Middleware is not of subclass TBBaseMiddleware")
+        self.middlewares.append(middleware()) # Create and append middleware
+
+    def load_interface(self, interface, interface_name):
+        """Creates and registers a interface for the test
+        
+        Arguments:
+            interface {TBBaseInterface} -- Class of TBBaseInterface, **not instance of**
+            interface_name {String} -- Name of the interface
+        """
+
+        if not issubclass(interface, TBBaseInterface):
+            raise ImproperlyConfigured("Interface is not of subclass TBBaseInterface")
+        self.interfaces[interface_name]: interface() # Create and register interface
 
     def ready(self):
         """Checks the tests is ready to start execution
 
-        * Checks first_step is loaded
+        * Checks steps are loaded
         * Checks middlewares are not empty
         * Checks interfaces are not empty
         
         Returns:
-            [type] -- [description]
+            Boolean -- Is the test ready
         """
 
-        return False
+        ## Check step
+        if self.first_step is None:
+            return False
 
-    
-            
+        ## Check middleware
+        if self.middlewares:
+            for middleware in self.middlewares: # check each middleware is ready
+                if middleware.ready(): continue
+                else: return False # an interface is not ready
+        else: # no middlewares loaded
+            return False
+
+        ## Check interfaces
+        if self.interfaces:
+            for interface in self.interfaces:
+                if self.interfaces[interface].ready(): # check each interface is ready
+                    continue
+                else:
+                    return False # an interface is not ready
+        else: # no middlewares loaded
+            return False
+
+        # All checks passed
+        return True

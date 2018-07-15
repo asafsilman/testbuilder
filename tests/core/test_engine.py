@@ -1,7 +1,7 @@
 import unittest
 from testbuilder.core.engine import TBEngine
 from testbuilder.core.base.baseinterface import TBBaseInterface
-from testbuilder.core.base.basemiddleware import TBMiddleware
+from testbuilder.core.base.basemiddleware import TBBaseMiddleware
 
 class TestTBEngine(unittest.TestCase):
     def setUp(self):
@@ -23,6 +23,6 @@ class TestTBEngine(unittest.TestCase):
 
         self.engine.load_middleware(middleware_name, middleware_module)
         self.assertTrue(
-             issubclass(self.engine.middlewares[middleware_name], TBMiddleware),
-            "Registered middleware is not of subclass TBMiddleware"
+             issubclass(self.engine.middlewares[middleware_name], TBBaseMiddleware),
+            "Registered middleware is not of subclass TBBaseMiddleware"
         )

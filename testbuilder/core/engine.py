@@ -4,7 +4,7 @@ Testbuilder Engine class
 
 from testbuilder.conf import settings
 from testbuilder.core.base.baseinterface import TBBaseInterface
-from testbuilder.core.base.basemiddleware import TBMiddleware
+from testbuilder.core.base.basemiddleware import TBBaseMiddleware
 from testbuilder.core.exceptions import ImproperlyConfigured
 
 import importlib
@@ -41,8 +41,8 @@ class TBEngine:
 
         middleware = load_module(middleware_entry)
 
-        if not issubclass(middleware, TBMiddleware):
-            raise ImproperlyConfigured("Middleware does not derive from TBMiddleware")
+        if not issubclass(middleware, TBBaseMiddleware):
+            raise ImproperlyConfigured("Middleware does not derive from TBBaseMiddleware")
 
         self.middlewares[middleware_name] = middleware
 
@@ -68,5 +68,3 @@ class TBEngine:
 
         # All tests passed
         return True
-
-        

@@ -1,4 +1,4 @@
-from testbuilder.core.base.basemiddleware import TBMiddleware
+from testbuilder.core.base.basemiddleware import TBBaseMiddleware
 
-class BasicMiddleware(TBMiddleware):
+class BasicMiddleware(TBBaseMiddleware):
     pass
