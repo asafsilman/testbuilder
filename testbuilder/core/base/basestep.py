@@ -7,6 +7,30 @@ class StepStatus(Enum):
     NOT_STARTED = 3
     IN_PROGRESS = 4
 
+class StepContext:
+    step_action = None
+    step_argument_1 = None
+    step_argument_2 = None
+
+    next_step = None
+
+    def __init__(self, step):
+        if not isinstance(step, TBBaseStep):
+            raise TypeError("Step must be of type TBBaseStep")
+        self.step = step
+
+    def get_next_step(self):
+        """Returns the next step in test
+        
+        Returns:
+            TBBaseStep -- The next step in test
+        """
+
+        if self.next_step is not None:
+            return self.next_step
+        else:
+            return self.step.next_step
+
 class TBBaseStep:
     """
     TestBuilder Base Step
