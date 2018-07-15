@@ -8,35 +8,53 @@ from testbuilder.core.exceptions import ImproperlyConfigured
 
 import importlib
 
+def load_module(module):
+    module_path, _, class_name = module.rpartition(".")
+    module = importlib.import_module(module_path)
+
+    return getattr(module, class_name, None)
+
+
 class TBEngine:
     interfaces = {}
+    middlewares = {}
+    tests = {}
 
     def __init__(self):
         pass
 
-    def load_interface(self, interface_name, interface_module_name):
-        mod = importlib.import_module(interface_module_name)
-        entry = getattr(mod, "interface_entry", None)
+    def load_interface(self, interface_name, interface_module):
+        interface_path = ".".join([interface_module, "interface_entry"])
+        interface_entry = load_module(interface_path)
 
-        if entry is None:
-            desc = "Interface {interface_name} is improperly configured".format_map(interface_name=interface_name)
-            raise ImproperlyConfigured(desc)
-
-        mod_path, _, class_name = entry.rpartition(".")
-        module = importlib.import_module(mod_path)
-
-        interface = getattr(module, class_name, None)
-
-        if interface is None:
-            desc = "Interface {interface_name} is improperly configured no class names {class_name}".format_map(interface_name=interface_name, class_name=class_name)
-            raise ImproperlyConfigured(desc)
+        interface = load_module(interface_entry)
 
         if not issubclass(interface, TBBaseInterface):
             raise ImproperlyConfigured("Interface does not derive from TBBaseInterface")
 
-        self.interfaces[interface_name] = interface()
+        self.interfaces[interface_name] = interface
 
     def ready(self):
-        pass
+        """Checks the engine is ready to start executing test scripts
+
+        * Checks Interfaces are not empty
+        * Checks Middlewares are not empty
+        * Checks Tests are not empty
+        
+        Returns:
+            Boolean -- Is engine ready to start executing
+        """
+
+        ## Check interfaces are ready
+        if not self.interfaces: # Is interfaces empty
+            
+            return False # Interface is empty
+
+        ## Check tests are ready
+        if not self.tests: # Is tests empty
+            return False # Tests is empty
+
+        # All tests passed
+        return True
 
         

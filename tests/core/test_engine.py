@@ -12,6 +12,6 @@ class TestTBEngine(unittest.TestCase):
 
         self.engine.load_interface(interface_name, interface_module)
         self.assertTrue(
-            issubclass(self.engine.interfaces[interface_name].__class__, TBBaseInterface),
-            "Registered interface is not of type TBBaseInterface"
+            issubclass(self.engine.interfaces[interface_name], TBBaseInterface),
+            "Registered interface is not of subclass TBBaseInterface"
         )
