@@ -4,6 +4,7 @@ Testbuilder Engine class
 
 from testbuilder.conf import settings
 from testbuilder.core.base.baseinterface import TBBaseInterface
+from testbuilder.core.base.basemiddleware import TBMiddleware
 from testbuilder.core.exceptions import ImproperlyConfigured
 
 import importlib
@@ -33,6 +34,17 @@ class TBEngine:
             raise ImproperlyConfigured("Interface does not derive from TBBaseInterface")
 
         self.interfaces[interface_name] = interface
+
+    def load_middleware(self, middleware_name, middleware_module):
+        middleware_path = ".".join([middleware_module, "middleware_entry"])
+        middleware_entry = load_module(middleware_path)
+
+        middleware = load_module(middleware_entry)
+
+        if not issubclass(middleware, TBMiddleware):
+            raise ImproperlyConfigured("Middleware does not derive from TBMiddleware")
+
+        self.middlewares[middleware_name] = middleware
 
     def ready(self):
         """Checks the engine is ready to start executing test scripts
