@@ -24,7 +24,7 @@ class TBEngine:
     def __init__(self):
         pass
 
-    def load_interface(self, interface_name, interface_module):
+    def load_interface(self, interface_name, interface_module) -> None:
         interface_path = ".".join([interface_module, "interface_entry"])
         interface_entry = load_module(interface_path)
 
@@ -35,7 +35,7 @@ class TBEngine:
 
         self.interfaces[interface_name] = interface
 
-    def load_middleware(self, middleware_name, middleware_module):
+    def load_middleware(self, middleware_name, middleware_module) -> None:
         middleware_path = ".".join([middleware_module, "middleware_entry"])
         middleware_entry = load_module(middleware_path)
 
@@ -46,7 +46,7 @@ class TBEngine:
 
         self.middlewares[middleware_name] = middleware
 
-    def ready(self):
+    def ready(self) -> None:
         """Checks the engine is ready to start executing test scripts
 
         * Checks Interfaces are not empty

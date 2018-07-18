@@ -1,4 +1,6 @@
 """Base step class"""
+from __future__ import annotations
+
 from enum import Enum
 
 class StepStatus(Enum):
@@ -19,7 +21,7 @@ class StepContext:
             raise TypeError("Step must be of type TBBaseStep")
         self.step = step
 
-    def get_next_step(self):
+    def get_next_step(self) -> TBBaseStep:
         """Returns the next step in test
         
         Returns:
@@ -59,7 +61,7 @@ class TBBaseStep:
         self.argument_1 = kwargs.get("argument_1")
         self.argument_2 = kwargs.get("argument_2")
 
-    def add_next_step(self, next_step):
+    def add_next_step(self, next_step) -> TBBaseStep:
         """Adds next step for current step.
         Also adds a backreference in next step to current step
         
@@ -75,7 +77,7 @@ class TBBaseStep:
         self.next_step = next_step
         next_step.previous_step = self # Add back reference to step
 
-    def is_last_step(self):
+    def is_last_step(self) -> bool:
         """Returns whether there is a step following current step
         
         Returns:
@@ -84,7 +86,7 @@ class TBBaseStep:
 
         return self.next_step is None
 
-    def is_first_step(self):
+    def is_first_step(self) -> bool:
         """Returns whether there is a step preceding current step
         
         Returns:

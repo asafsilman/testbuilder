@@ -1,7 +1,8 @@
 """Base Testbuilder Middleware class"""
+from .basestep import StepContext
 
 class TBBaseMiddleware:
-    def process_step(self, step_context, test):
+    def process_step(self, step_context, test) -> StepContext:
         """Overwrite this function by middleware class
         
         Arguments:

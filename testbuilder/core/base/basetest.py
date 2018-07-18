@@ -35,7 +35,7 @@ class TBBaseTest:
     def __init__(self, *args, **kwargs):
         self.test_name = kwargs.get("test_name", "")
 
-    def load_steps(self, first_step):
+    def load_steps(self, first_step) -> None:
         """Loads the first step for the test.
         
         Arguments:
@@ -53,7 +53,7 @@ class TBBaseTest:
         self.first_step = first_step
         self.current_step = self.first_step
 
-    def load_middleware(self, middleware):
+    def load_middleware(self, middleware) -> None:
         """Creates and appends middleware to list of middleswares.
 
         Note that the order in which this function is called has a role in how the script may run.
@@ -66,7 +66,7 @@ class TBBaseTest:
             raise ImproperlyConfigured("Middleware is not of subclass TBBaseMiddleware")
         self.middlewares.append(middleware()) # Create and append middleware
 
-    def load_interface(self, interface, interface_name):
+    def load_interface(self, interface, interface_name) -> None:
         """Creates and registers a interface for the test
         
         Arguments:
@@ -78,7 +78,7 @@ class TBBaseTest:
             raise ImproperlyConfigured("Interface is not of subclass TBBaseInterface")
         self.interfaces[interface_name]: interface() # Create and register interface
 
-    def ready(self):
+    def ready(self) -> bool:
         """Checks the tests is ready to start execution
 
         * Checks steps are loaded
