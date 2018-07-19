@@ -101,8 +101,6 @@ class YAMLTestLoader(TBBaseTestLoader):
 
         step = YAMLStep(**step_mapping)
 
-        print(step.get_argument_1())
-
         return step
 
     def get_step_field(self, field, test):
