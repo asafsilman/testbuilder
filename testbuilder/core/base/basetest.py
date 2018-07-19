@@ -8,6 +8,7 @@ from testbuilder.core.exceptions import (
 from testbuilder.core.base.basemiddleware import TBBaseMiddleware
 from testbuilder.core.base.baseinterface import TBBaseInterface
 from testbuilder.core.base.basestep import TBBaseStep, StepContext
+from testbuilder.core.base.basefixtures import TBBaseFixture
 
 class TBBaseTest:
     """
@@ -26,8 +27,8 @@ class TBBaseTest:
 
     test_name=""
     
-    test_iterations=1
-    current_iteration=1
+    test_iterations=0
+    current_iteration=0
 
     first_step=None
     current_step=None
@@ -40,7 +41,7 @@ class TBBaseTest:
 
     def __init__(self, *args, **kwargs):
         self.test_name = kwargs.get("test_name", "")
-        self.test_iterations = kwargs.get("iterations", 1)
+        self.test_iterations = kwargs.get("iterations", 0)
 
     def load_additional_property(self, key, value):
         """Add a additional test property to testcase
@@ -52,8 +53,26 @@ class TBBaseTest:
 
         self.additional_properties[key] = value
 
-    def load_fixtures(self, fixtures_path):
-        pass
+    def load_fixtures(self, fixture, fixture_name=None):
+        """Load fixture to testcase
+        
+        Arguments:
+            fixture {TBBaseFixture} -- Fixture instance
+        
+        Keyword Arguments:
+            fixture_name {str} -- Optional name of fixture (default: {None})
+        
+        Raises:
+            ImproperlyConfigured -- Raised if fixture is not of subclass TBBaseFixture
+        """
+
+        if not isinstance(fixture, TBBaseFixture):
+            raise ImproperlyConfigured("Expected 'fixture' to be of class TBBaseFixture")
+        
+        if fixture_name is None:
+            self.fixtures[fixture.fixture_name] = fixture
+        else:
+            self.fixtures[fixture_name] = fixture
 
     def load_steps(self, first_step) -> None:
         """Loads the first step for the test.
@@ -97,6 +116,16 @@ class TBBaseTest:
         if not issubclass(interface, TBBaseInterface):
             raise ImproperlyConfigured("Interface is not of subclass TBBaseInterface")
         self.interfaces[interface_name]: interface() # Create and register interface
+
+    def get_current_iteration(self) -> int:
+        """Gets the current test iteration number
+        
+        Returns:
+            int -- Current iteration
+        """
+
+        return self.current_iteration
+
 
     def ready(self) -> bool:
         """Checks the tests is ready to start execution

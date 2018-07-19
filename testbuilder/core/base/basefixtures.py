@@ -2,10 +2,7 @@
 
 class TBBaseFixture:
     fixture_data=None
-
-    def load_fixture(self, *args):
-        """Load fixture data"""
-        pass
+    fixture_name=""
 
     def get_value(self, iteration, column):
         """
@@ -17,3 +14,9 @@ class TBBaseFixture:
         """
 
         pass
+
+    def __repr__(self):
+        return f"<Fixture {self.fixture_name}"
+
+    def __str__(self):
+        return f"<Fixture {self.fixture_name}>"

@@ -7,7 +7,7 @@ additional_properties:
   RTM_test_name: BasicTest
 
 fixtures:
-  umrns: "project-name/fixtures/umrn_list.csv"
+  umrns: "sample_fixture.csv"
 
 steps:
     - action: "ObjectMap"

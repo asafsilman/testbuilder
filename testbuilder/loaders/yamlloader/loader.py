@@ -10,6 +10,7 @@ from testbuilder.conf import settings
 from testbuilder.core.base.basetest import TBBaseTest
 from testbuilder.core.base.basetestloader import TBBaseTestLoader
 from testbuilder.core.exceptions import ImproperlyConfigured
+from testbuilder.fixture.csv_fixture import CSVFixture
 
 from .yamlstep import YAMLStep
 
@@ -50,6 +51,19 @@ class YAMLTestLoader(TBBaseTestLoader):
                 test.load_additional_property(setting, value)
 
         # Load test fixtures
+        test_fixtures = yaml_test_data.get("fixtures")
+        if test_fixtures:
+            for fixture_name in test_fixtures: # Iterate over each fixture in testcase
+                fixture_path = test_fixtures[fixture_name]
+                
+                if not os.path.exists(fixture_path): #If fixture is relative path
+                    fixture_path = os.path.join(
+                        os.path.dirname(path), # Testcase path
+                        fixture_path # Fixture path relative to testcase
+                    )
+                fixture = CSVFixture(fixture_name, fixture_path) # Create fixutre
+                
+                test.load_fixtures(fixture) # Load fixture in test
 
         first_step = None
         _cur_step = None
@@ -121,5 +135,3 @@ class YAMLTestLoader(TBBaseTestLoader):
             for s in split[1:]:
                 curr_s = curr_s[s]
             return curr_s
-
-    
