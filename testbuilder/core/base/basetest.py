@@ -25,6 +25,9 @@ class TBBaseTest:
     """
 
     test_name=""
+    
+    test_iterations=1
+    current_iteration=1
 
     first_step=None
     current_step=None
@@ -32,8 +35,21 @@ class TBBaseTest:
     middlewares = [] # an ordered collection of middlewares
     interfaces = {}
 
+    additional_properties = {}
+
     def __init__(self, *args, **kwargs):
         self.test_name = kwargs.get("test_name", "")
+        self.test_iterations = kwargs.get("iterations", 1)
+
+    def load_additional_property(self, key, value):
+        """Add a additional test property to testcase
+        
+        Arguments:
+            key {str} -- Key name
+            value {any} -- Value
+        """
+
+        self.additional_properties[key] = value
 
     def load_steps(self, first_step) -> None:
         """Loads the first step for the test.
@@ -47,7 +63,7 @@ class TBBaseTest:
         """
 
         if not isinstance(first_step, TBBaseStep):
-            raise TypeError("excpected 'first_step' to by of type TBBaseStep")
+            raise TypeError("Excpected 'first_step' to by of type TBBaseStep")
         if not first_step.is_first_step():
             raise StepException("This is not the first step of the test")
         self.first_step = first_step
@@ -113,3 +129,9 @@ class TBBaseTest:
 
         # All checks passed
         return True
+
+    def __str__(self):
+        return f"<TestCase '{self.test_name}'>"
+
+    def __repr__(self):
+        return f"<TestCase '{self.test_name}'>"
