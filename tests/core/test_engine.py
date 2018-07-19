@@ -9,7 +9,7 @@ class TestTBEngine(unittest.TestCase):
 
     def test_load_interface(self):
         interface_name = "basic_interface"
-        interface_module = "testbuilder.contrib.basic"
+        interface_module = "testbuilder.interface.basic"
 
         self.engine.load_interface(interface_name, interface_module)
         self.assertTrue(

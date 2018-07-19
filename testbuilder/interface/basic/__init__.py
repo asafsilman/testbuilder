@@ -1,0 +1,1 @@
+interface_entry="testbuilder.interface.basic.interface.BasicInterface"
