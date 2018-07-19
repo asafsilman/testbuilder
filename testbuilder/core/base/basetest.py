@@ -36,6 +36,7 @@ class TBBaseTest:
     interfaces = {}
 
     additional_properties = {}
+    fixtures = {}
 
     def __init__(self, *args, **kwargs):
         self.test_name = kwargs.get("test_name", "")
@@ -50,6 +51,9 @@ class TBBaseTest:
         """
 
         self.additional_properties[key] = value
+
+    def load_fixtures(self, fixtures_path):
+        pass
 
     def load_steps(self, first_step) -> None:
         """Loads the first step for the test.
