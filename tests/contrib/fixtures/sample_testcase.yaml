@@ -1,0 +1,48 @@
+---
+properties:
+  iterations: 1
+  test_name: sample_testcase
+
+additional_properties:
+  RTM_test_name: BasicTest
+
+fixtures:
+  umrns: "project-name/fixtures/umrn_list.csv"
+
+steps:
+    - action: "ObjectMap"
+      argument_1: "Example"
+      argument_2: "Login"
+    
+    - action: "LaunchApp"
+      argument_1: "$settings.APP_DIRECTORY"
+    
+    - action: "ClickType"
+      argument_1: "Username"
+      argument_2: "$settings.APP_LOGIN.username"
+
+    - action: "ClickType"
+      argument_1: "Password"
+      argument_2: "$settings.APP_LOGIN.password"
+
+    - action: "Click"
+      argument_1: "Login"
+
+    - action: "ObjectMap"
+      argument_1: "Example"
+      argument_2: "HomePage"
+
+    - action: "Type"
+      argument_1: "SearchPatient"
+      argument_2: "$fixtures.umrns['UMRN']" # Index is the current iteration
+
+    - action: "Click"
+      argument_1: "Search"
+
+    - action: "GetText"
+      argument_1: "PatientFirstName"
+      tag: "first_name"
+
+    - action: "Validate"
+      argument_1: "$fixtures.umrns['FirstName']"
+      argument_1: "$steps.tag='first_name'"
