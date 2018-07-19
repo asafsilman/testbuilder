@@ -14,3 +14,14 @@ INSTALLED_INTERFACES = {}
 
 # List of middlewares to use 
 STEP_MIDDLEWARE = []
+
+##########################
+# Application Settings
+##########################
+
+APP_DIRECTORY = ""
+APP_NAME = ""
+APP_LOGIN = {
+    "username": "rmo_user",
+    "password": "rmo_pass"
+}
