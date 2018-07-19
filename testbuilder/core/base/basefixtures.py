@@ -16,7 +16,7 @@ class TBBaseFixture:
         pass
 
     def __repr__(self):
-        return f"<Fixture {self.fixture_name}"
+        return f"<Fixture '{self.fixture_name}'>"
 
     def __str__(self):
-        return f"<Fixture {self.fixture_name}>"
+        return f"<Fixture '{self.fixture_name}'>"
