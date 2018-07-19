@@ -98,13 +98,21 @@ class TBBaseStep:
         return self.previous_step is None
 
     def get_action(self):
+        if callable(self.action):
+            return self.action()
         return self.action
 
     def get_argument_1(self):
+        if callable(self.argument_1):
+            return self.argument_1() #pylint: disable=E1102
         return self.argument_1
 
     def get_argument_2(self):
+        if callable(self.argument_2):
+            return self.argument_2() #pylint: disable=E1102
         return self.argument_2
 
     def get_result(self):
+        if callable(self.result):
+            return self.result() #pylint: disable=E1102
         return self.result
