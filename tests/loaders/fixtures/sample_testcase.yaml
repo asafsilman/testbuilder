@@ -45,4 +45,4 @@ steps:
 
     - action: "Validate"
       argument_1: "$fixtures.umrns['FirstName']"
-      argument_1: "$steps.tag='first_name'"
+      argument_2: "$steps.tag='first_name'"

@@ -101,6 +101,8 @@ class YAMLTestLoader(TBBaseTestLoader):
 
         step = YAMLStep(**step_mapping)
 
+        print(step.get_argument_1())
+
         return step
 
     def get_step_field(self, field, test):
@@ -109,7 +111,7 @@ class YAMLTestLoader(TBBaseTestLoader):
         elif re.match(r"^\$settings\.", field, flags=re.IGNORECASE):
             return self._step_field_from_settings(field)
         elif re.match(r"^\$fixtures\.", field, flags=re.IGNORECASE):
-            return field # TODO: Value form fixtures
+            return self._step_field_from_fixture(field, test)
         elif re.match(r"^\$steps\.", field, flags=re.IGNORECASE):
             return field # TODO: Value from steps result
         else:
@@ -135,3 +137,18 @@ class YAMLTestLoader(TBBaseTestLoader):
             for s in split[1:]:
                 curr_s = curr_s[s]
             return curr_s
+
+    def _step_field_from_fixture(self, field, test):
+        _,_,fixture_info = field.partition(".")
+
+        f0 = fixture_info.find('[')
+
+        fixture_name = fixture_info[0:f0]
+        fixture_column = fixture_info[f0+2:-2]
+
+        fixture = test.fixtures.get(fixture_name)
+
+        if fixture is None:
+            raise ImproperlyConfigured(f"Test does not contain fixture{fixture_name}")
+
+        return lambda: fixture.get_value(test.get_current_iteration(), fixture_column)
