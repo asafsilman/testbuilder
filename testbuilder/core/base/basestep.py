@@ -14,6 +14,8 @@ class StepContext:
     step_argument_1 = None
     step_argument_2 = None
 
+    step_result = None
+
     next_step = None
 
     def __init__(self, step):
@@ -94,3 +96,15 @@ class TBBaseStep:
         """
 
         return self.previous_step is None
+
+    def get_action(self):
+        return self.action
+
+    def get_argument_1(self):
+        return self.argument_1
+
+    def get_argument_2(self):
+        return self.argument_2
+
+    def get_result(self):
+        return self.result

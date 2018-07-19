@@ -6,3 +6,6 @@ env/
 
 # python cache
 __pycache__
+
+# System files
+.DS_STORE
