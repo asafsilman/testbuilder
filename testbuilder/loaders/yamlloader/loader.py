@@ -74,7 +74,7 @@ class YAMLTestLoader(TBBaseTestLoader):
                 first_step = self.load_test_step(step, test)
                 _cur_step = first_step
                 continue
-            next_step = self.load_test_step(step, test) # Load the next step
+            next_step = self.load_test_step(step, test, first_step) # Load the next step
             _cur_step.add_next_step(next_step) # Register the next step
             _cur_step = next_step # Replace current step with next step
 
@@ -82,28 +82,31 @@ class YAMLTestLoader(TBBaseTestLoader):
 
         self.tests.append(test)
 
-    def load_test_step(self, step, test) -> YAMLStep:
+    def load_test_step(self, step, test, first_step=None) -> YAMLStep:
         """Loads a test step
         
         Arguments:
             step {dict} -- Step details from file
-        
+
+        Keyword Arguments:
+            first_step {TBBaseStep} -- First Step (default: {None})
+
         Returns:
             YAMLStep -- The loaded step
         """
 
         step_mapping = {
-            "action": self.get_step_field(step.get("action"), test),
-            "argument_1": self.get_step_field(step.get("argument_1"), test),
-            "argument_2": self.get_step_field(step.get("argument_2"), test),
-            "tag": self.get_step_field(step.get("tag"), test)
+            "action": self.get_step_field(step.get("action"), test, first_step),
+            "argument_1": self.get_step_field(step.get("argument_1"), test, first_step),
+            "argument_2": self.get_step_field(step.get("argument_2"), test, first_step),
+            "tag": self.get_step_field(step.get("tag"), test, first_step)
         }
 
         step = YAMLStep(**step_mapping)
 
         return step
 
-    def get_step_field(self, field, test):
+    def get_step_field(self, field, test, first_step):
         if field is None:
             return ""
         elif re.match(r"^\$settings\.", field, flags=re.IGNORECASE):
@@ -111,7 +114,7 @@ class YAMLTestLoader(TBBaseTestLoader):
         elif re.match(r"^\$fixtures\.", field, flags=re.IGNORECASE):
             return self._step_field_from_fixture(field, test)
         elif re.match(r"^\$steps\.", field, flags=re.IGNORECASE):
-            return field # TODO: Value from steps result
+            return self._step_field_from_step(field, first_step)
         else:
             return field
 
@@ -150,3 +153,26 @@ class YAMLTestLoader(TBBaseTestLoader):
             raise ImproperlyConfigured(f"Test does not contain fixture{fixture_name}")
 
         return lambda: fixture.get_value(test.get_current_iteration(), fixture_column)
+
+    def _step_field_from_step(self, field, first_step):
+        _,_,step_info = field.partition(".")
+        
+        filterby,_,value = step_info.partition('=')
+
+        filterby = filterby.lower()
+        value = value[1:-1]
+
+        if filterby=="tag":
+            return self._get_step_result_by_tag(first_step, value)
+
+    def _get_step_result_by_tag(self, first_step, tag):
+        current_step = first_step
+        while True:
+            tag_value = getattr(current_step, "tag", None)
+            if tag_value == tag:
+                return lambda: current_step.get_result()
+
+            if current_step.is_last_step():
+                break
+            current_step = current_step.next_step
+        raise ImproperlyConfigured(f"No step found with tag {tag}")
