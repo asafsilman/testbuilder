@@ -9,6 +9,7 @@ from testbuilder.core.base.basemiddleware import TBBaseMiddleware
 from testbuilder.core.base.baseinterface import TBBaseInterface
 from testbuilder.core.base.basestep import TBBaseStep, StepContext
 from testbuilder.core.base.basefixtures import TBBaseFixture
+from testbuilder.core.base.baseobjectmap import TBBaseObjectMap
 
 class TBBaseTest:
     """
@@ -35,9 +36,10 @@ class TBBaseTest:
 
     middlewares = [] # an ordered collection of middlewares
     interfaces = {}
+    object_maps = {}
+    fixtures = {}
 
     additional_properties = {}
-    fixtures = {}
 
     def __init__(self, *args, **kwargs):
         self.test_name = kwargs.get("test_name", "")
@@ -116,6 +118,14 @@ class TBBaseTest:
         if not issubclass(interface, TBBaseInterface):
             raise ImproperlyConfigured("Interface is not of subclass TBBaseInterface")
         self.interfaces[interface_name]: interface() # Create and register interface
+
+    def load_object_map(self, object_map, name, page) -> None:
+        if not isinstance(object_map, TBBaseObjectMap):
+            raise ImproperlyConfigured("Objectmap is not of instance TBBaseObjectMap")
+        
+        if name not in self.object_maps:
+            self.object_maps[name] = {}
+        self.object_maps[name][page] = object_map
 
     def get_current_iteration(self) -> int:
         """Gets the current test iteration number

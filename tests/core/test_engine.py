@@ -23,6 +23,6 @@ class TestTBEngine(unittest.TestCase):
 
         self.engine.load_middleware(middleware_name, middleware_module)
         self.assertTrue(
-             issubclass(self.engine.middlewares[middleware_name], TBBaseMiddleware),
+            issubclass(self.engine.middlewares[middleware_name], TBBaseMiddleware),
             "Registered middleware is not of subclass TBBaseMiddleware"
         )
