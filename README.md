@@ -13,4 +13,4 @@ Testbuilder is the RMO's automation test framework. It is a robust framework tha
 3. Install requirements `pip install requirements.txt`
 
 ## Running unittests
-
+Run command `python -m testbuilder test`
