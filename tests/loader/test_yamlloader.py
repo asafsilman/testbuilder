@@ -1,6 +1,6 @@
 import unittest
 import os
-from testbuilder.loaders.yamlloader.loader import YAMLTestLoader
+from testbuilder.loader.yamlloader.loader import YAMLTestLoader
 from testbuilder.core.base.basefixtures import TBBaseFixture
 
 class TestYAMLTestLoader(unittest.TestCase):
