@@ -3,7 +3,28 @@ Invoke testbuilder commandline utility.
 
 Example: python -m testbuilder <command>
 """
+
+import click
+
 from testbuilder.core import management
 
-if __name__ == "__main__":
-    management.execute_from_command_line()
+@click.group()
+def cli():
+    pass
+
+@click.command()
+@click.argument('file', required=True, metavar="<file>")
+@click.option('--file-type', '-t', default="excel", type=click.Choice(["excel", "yaml"]))
+def run(file, file_type):
+    management.run_test_case(file, file_type)
+
+@click.command()
+@click.option('--verbose', '-v', is_flag=True)
+def test(verbose):
+    management.run_unittests(verbose)
+
+cli.add_command(run)
+cli.add_command(test)
+
+if __name__=="__main__":
+    cli(prog_name="python -m testbuilder") #pylint: disable=E1123
