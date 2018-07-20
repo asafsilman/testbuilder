@@ -7,14 +7,7 @@ from testbuilder.core.base.baseinterface import TBBaseInterface
 from testbuilder.core.base.basemiddleware import TBBaseMiddleware
 from testbuilder.core.exceptions import ImproperlyConfigured
 
-import importlib
-
-def load_module(module):
-    module_path, _, class_name = module.rpartition(".")
-    module = importlib.import_module(module_path)
-
-    return getattr(module, class_name, None)
-
+from testbuilder.utils.module_loader import load_module
 
 class TBEngine:
     interfaces = {}
