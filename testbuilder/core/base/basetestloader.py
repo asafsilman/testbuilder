@@ -3,11 +3,11 @@ from typing import List
 from .basetest import TBBaseTest
 
 class TBBaseTestLoader:
-    def load_tests(self) -> List[TBBaseTest]:
-        """Overwrite this function. Returns a list of tests.
+    def load_tests(self, test_location) -> TBBaseTest:
+        """Overwrite this function. Returns a testscase.
         
         Returns:
-            List[TBBaseTest] -- A list of test cases
+            TBBaseTest -- loaded testcase
         """
         
         raise NotImplementedError("Overwrite this function")

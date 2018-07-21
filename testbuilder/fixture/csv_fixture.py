@@ -11,8 +11,8 @@ class CSVFixture(TBBaseFixture):
             csv_path {str} -- Path to csv fixture
         """
 
-        self.fixture_name = fixture_name
         self.fixture_data = pandas.read_csv(csv_path, **kwargs)
+        super().__init__(fixture_name)
 
     def get_value(self, iteration, column):
         """Get the value from the fixture for the current iteration

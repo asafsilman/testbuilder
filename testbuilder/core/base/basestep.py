@@ -10,17 +10,17 @@ class StepStatus(Enum):
     IN_PROGRESS = 4
 
 class StepContext:
-    step_action = None
-    step_argument_1 = None
-    step_argument_2 = None
-
-    step_result = None
-
-    next_step = None
-
     def __init__(self, step):
         if not isinstance(step, TBBaseStep):
             raise TypeError("Step must be of type TBBaseStep")
+
+        self.step_action = None
+        self.step_argument_1 = None
+        self.step_argument_2 = None
+
+        self.step_result = None
+
+        self.next_step = None
         self.step = step
 
     def get_next_step(self) -> TBBaseStep:
@@ -48,17 +48,17 @@ class TBBaseStep:
     If `previous_step` is None, then its the first step
     """
 
-    next_step=None
-    previous_step=None
-
-    action=None
-    argument_1=None
-    argument_2=None
-    result=None
-
     status=StepStatus.NOT_STARTED
 
     def __init__(self, *args, **kwargs):
+        self.next_step=None
+        self.previous_step=None
+
+        self.action=None
+        self.argument_1=None
+        self.argument_2=None
+        self.result=None
+
         self.action = kwargs.get("action")
         self.argument_1 = kwargs.get("argument_1")
         self.argument_2 = kwargs.get("argument_2")

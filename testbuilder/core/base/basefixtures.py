@@ -1,8 +1,8 @@
 """Base Testbuilder Fixtures"""
 
 class TBBaseFixture:
-    fixture_data=None
-    fixture_name=""
+    def __init__(self, fixture_name):
+        self.fixture_name=fixture_name
 
     def get_value(self, iteration, column):
         """
@@ -12,8 +12,7 @@ class TBBaseFixture:
             iteration {int} -- Iteration number
             column {str} -- Column Name
         """
-
-        pass
+        raise NotImplementedError("Overwrite this function")
 
     def __repr__(self):
         return f"<Fixture '{self.fixture_name}'>"

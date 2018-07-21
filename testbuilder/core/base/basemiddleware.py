@@ -12,5 +12,4 @@ class TBBaseMiddleware:
         Returns:
             StepContext -- The step context
         """
-
-        return step_context
+        raise NotImplementedError("Overwrite this function")
