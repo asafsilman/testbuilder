@@ -7,15 +7,12 @@ from .load_engine import load_engine
 
 import unittest
 
-def run_test_case(file, file_type):
+def run_test_case(file, file_type, profile):
     engine = load_engine()
 
-    # TODO
-    # print(engine.interfaces)
-    # print(engine.objectmap_parsers)
-    # print(engine.middlewares)
-    # print(engine.testloaders)
-    # print(engine.profiles)
+    test = engine.create_test(file, file_type, profile)
+
+    # test.run()
 
 def run_unittests(verbose):
     package_tests = unittest.TestLoader().discover(start_dir="tests")

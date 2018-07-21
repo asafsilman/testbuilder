@@ -45,10 +45,10 @@ class TBEngine:
         parser_path = ".".join([parser_module, "objectmap_parser_entry"])
         parser_entry = load_module(parser_path)
 
-        parser = load_module(parser_entry)
+        parser = load_module(parser_entry)()
 
-        if not issubclass(parser, TBBaseObjectMapParser):
-            raise ImproperlyConfigured("Objectmap parser does not derive from TBBaseObjectMapParser")
+        if not isinstance(parser, TBBaseObjectMapParser):
+            raise ImproperlyConfigured("Objectmap parser is not of instance TBBaseObjectMapParser")
 
         self.objectmap_parsers[parser_name]=parser
 
@@ -56,18 +56,50 @@ class TBEngine:
         loader_path = ".".join([loader_module, "loader_entry"])
         loader_entry = load_module(loader_path)
 
-        loader = load_module(loader_entry)
+        loader = load_module(loader_entry)()
 
-        if not issubclass(loader, TBBaseTestLoader):
-            raise ImproperlyConfigured("TestLoader does not derive from TBBaseTestLoader")
+        if not isinstance(loader, TBBaseTestLoader):
+            raise ImproperlyConfigured("TestLoader is not of instance TBBaseTestLoader")
 
         self.testloaders[loader_name]=loader
 
     def load_profile(self, profile_name, profile) -> None:
         self.profiles[profile_name] = profile
 
-    def create_test(self, test_location, loader, profile):
-        pass
+    def create_test(self, test_location, loader_name, profile_name):
+        if loader_name not in self.testloaders:
+            raise ImproperlyConfigured(f"No testloader installed named {loader_name}")
+        if profile_name not in self.profiles:
+            raise ImproperlyConfigured(f"No profile installed named {profile_name}")
+        
+        test = self.testloaders[loader_name].load_test(test_location)
+
+        
+        profile = self.profiles[profile_name]
+
+        ## Step 1. Load middlewares
+        if "middlewares" in profile:
+            for middleware_name in profile["middlewares"]:
+                middleware = self.middlewares[middleware_name]
+                test.load_middleware(middleware)
+
+        ## Step 2. Load interfaces
+        for interface_name, interface in self.interfaces.items():
+            test.load_interface(interface, interface_name)
+
+        ## Step 3. Load objectmap
+        for objectmap_name in settings["OBJECT_MAPS"]:
+            obj_parser_name, obj_location = settings["OBJECT_MAPS"][objectmap_name]
+
+            if obj_parser_name not in self.objectmap_parsers:
+                raise ImproperlyConfigured(f"ObjectMap Parser {obj_parser_name} is not installed")
+
+            obj_parser = self.objectmap_parsers[obj_parser_name]
+            object_map = obj_parser.parse(objectmap_name, obj_location)
+
+            test.load_object_map(object_map, objectmap_name)
+
+        return test
 
     def ready(self) -> None:
         """Checks the engine is ready to start executing test scripts

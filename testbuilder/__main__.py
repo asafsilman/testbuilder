@@ -15,8 +15,9 @@ def cli():
 @click.command()
 @click.argument('file', required=True, metavar="<file>")
 @click.option('--file-type', '-t', default="excel", type=click.Choice(["excel", "yaml"]))
-def run(file, file_type):
-    management.run_test_case(file, file_type)
+@click.option('--profile', '-p', default="default")
+def run(file, file_type, profile):
+    management.run_test_case(file, file_type, profile)
 
 @click.command()
 @click.option('--verbose', '-v', is_flag=True)

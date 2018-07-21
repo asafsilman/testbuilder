@@ -123,10 +123,6 @@ class Element:
         self.interface_prefix=interface_prefix
 
 class TBBaseObjectMapParser:
-    def __init__(self, object_map_name, object_map_location):
-        self.object_map_name = object_map_name
-        self.object_map_location=object_map_location
-
-    def parse(self) -> TBBaseObjectMap:
+    def parse(self, object_map_name, object_map_location) -> TBBaseObjectMap:
         """Overwrite this function"""
         raise NotImplementedError("This parser is not implemented yet")

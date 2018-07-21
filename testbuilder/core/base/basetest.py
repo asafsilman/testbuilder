@@ -117,15 +117,13 @@ class TBBaseTest:
 
         if not issubclass(interface, TBBaseInterface):
             raise ImproperlyConfigured("Interface is not of subclass TBBaseInterface")
-        self.interfaces[interface_name]: interface() # Create and register interface
+        self.interfaces[interface_name] = interface() # Create and register interface
 
-    def load_object_map(self, object_map, name, page) -> None:
+    def load_object_map(self, object_map, object_map_name) -> None:
         if not isinstance(object_map, TBBaseObjectMap):
             raise ImproperlyConfigured("Objectmap is not of instance TBBaseObjectMap")
-        
-        if name not in self.object_maps:
-            self.object_maps[name] = {}
-        self.object_maps[name][page] = object_map
+
+        self.object_maps[object_map_name] = object_map
 
     def get_current_iteration(self) -> int:
         """Gets the current test iteration number

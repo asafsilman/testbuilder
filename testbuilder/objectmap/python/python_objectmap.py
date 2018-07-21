@@ -6,10 +6,10 @@ from testbuilder.core.base.baseobjectmap import (
 )
 
 class PythonObjectMapParse(TBBaseObjectMapParser):
-    def parse(self):
-        object_map_module = ".".join([self.object_map_location, "OBJECT_MAP"])
+    def parse(self, object_map_name, object_map_location):
+        object_map_module = ".".join([object_map_location, "OBJECT_MAP"])
 
-        object_map = TBBaseObjectMap(self.object_map_name)
+        object_map = TBBaseObjectMap(object_map_name)
         python_object_map = load_module(object_map_module)
         
         for page_name in python_object_map:
