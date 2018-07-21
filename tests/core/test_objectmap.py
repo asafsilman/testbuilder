@@ -52,9 +52,6 @@ class TestTBBaseObjectMap(unittest.TestCase):
         object_map_1 = TBBaseObjectMap("object_map_not_ready")
 
         self.assertFalse(object_map_1.ready())
-        self.assertFalse(self.object_map.ready()) # current_page is not set
-
-        self.object_map.switch_page("page_1")
         self.assertTrue(self.object_map.ready())
 
 class TestTBBasePage(unittest.TestCase):

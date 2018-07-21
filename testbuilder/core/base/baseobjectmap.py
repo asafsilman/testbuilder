@@ -2,12 +2,10 @@
 from testbuilder.core.exceptions import ObjectMapException
 
 class TBBaseObjectMap:
-    name=None
-    current_page=None
-    pages={}
-
     def __init__(self, name):
         self.name = name
+        self.current_page = None
+        self.pages = {}
 
     def ready(self):
         """Is the objectmap ready
@@ -16,8 +14,6 @@ class TBBaseObjectMap:
             bool -- If the object map has loaded
         """
 
-        if self.current_page is None: # Is the current_page set
-            return False
         if not self.pages: # Is there atleast one page set
             return False
 
@@ -25,6 +21,7 @@ class TBBaseObjectMap:
         for page in self.pages:
             if not self.pages[page].ready(): # A page is not ready
                 return False
+        
         return True
 
     def load_page(self, page, page_name=None):
@@ -73,10 +70,6 @@ class TBBaseObjectMap:
         return self.current_page.get_element(element_name)
 
 class TBBasePage:
-    name=None
-    properties={}
-    elements={}
-
     def __init__(self, name, elements=None, properties=None):
         self.name = name
 
@@ -92,6 +85,9 @@ class TBBasePage:
         """
 
         self.elements[element_name] = element_URI
+
+    def add_property(self, property_name, property_value):
+        self.properties[property_name] = property_value
 
     def get_element(self, element_name):
         element_URI = self.elements.get(element_name)
@@ -111,10 +107,6 @@ class TBBasePage:
         return bool(self.elements)
     
 class Element:
-    element=None
-    element_name=None
-    interface_prefix=None
-
     def __init__(self, element_name, element_URI):
         """Loads a element from the objectmap
         
@@ -129,3 +121,12 @@ class Element:
         
         self.element=element
         self.interface_prefix=interface_prefix
+
+class TBBaseObjectMapParser:
+    def __init__(self, object_map_name, object_map_location):
+        self.object_map_name = object_map_name
+        self.object_map_location=object_map_location
+
+    def parse(self) -> TBBaseObjectMap:
+        """Overwrite this function"""
+        raise NotImplementedError("This parser is not implemented yet")

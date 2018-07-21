@@ -1,0 +1,1 @@
+objectmap_parser_entry="testbuilder.objectmap.python.python_objectmap.PythonObjectMapParse"
