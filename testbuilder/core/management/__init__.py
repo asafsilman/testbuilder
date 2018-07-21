@@ -11,7 +11,7 @@ def run_test_case(file, file_type, profile):
 
     test = engine.create_test(file, file_type, profile)
 
-    # test.run()
+    test.run()
 
 def run_unittests(verbose):
     package_tests = unittest.TestLoader().discover(start_dir="tests")

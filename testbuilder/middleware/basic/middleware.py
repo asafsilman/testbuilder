@@ -1,4 +1,8 @@
 from testbuilder.core.base.basemiddleware import TBBaseMiddleware
 
 class BasicMiddleware(TBBaseMiddleware):
-    pass
+    def before_step(self, step_context):
+        pass
+
+    def after_step(self, step_context):
+        pass

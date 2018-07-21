@@ -6,4 +6,4 @@ class TBBaseInterface:
         pass
 
     def ready(self):
-        pass
+        return True

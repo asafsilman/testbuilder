@@ -11,6 +11,9 @@ from testbuilder.core.base.basestep import TBBaseStep, StepContext
 from testbuilder.core.base.basefixtures import TBBaseFixture
 from testbuilder.core.base.baseobjectmap import TBBaseObjectMap
 
+MIDDLEWARE_MODE_BEFORE_STEP = 1
+MIDDLEWARE_MODE_AFTER_STEP = 2
+
 class TBBaseTest:
     """
     TestBuilder Base Test
@@ -134,6 +137,38 @@ class TBBaseTest:
 
         return self.current_iteration
 
+    def run(self):
+        if not self.ready():
+            raise ImproperlyConfigured("Cannot start testcase because the test is not ready")
+        
+        step_context = StepContext(self)
+
+        while self.current_step is not None: # End condition when no more steps
+            # Step 1. Update context
+            step_context.update_context(self.current_step, step_context)
+
+            # Step 2. Run middlewares for `before_step``
+            self.run_middlewares(step_context, MIDDLEWARE_MODE_BEFORE_STEP)
+
+            # Step 3. Run Step
+            self.execute_step(step_context)
+
+            # Step 4. Run middleswares for `after_step`
+            self.run_middlewares(step_context, MIDDLEWARE_MODE_AFTER_STEP)
+
+            # Step 5. Update step
+            self.current_step = step_context.next_step
+
+    def run_middlewares(self, step_context, mode):
+        if mode == MIDDLEWARE_MODE_BEFORE_STEP:
+            for middleware in self.middlewares:
+                middleware.before_step(step_context)
+        elif mode == MIDDLEWARE_MODE_AFTER_STEP:
+            for middleware in self.middlewares:
+                middleware.after_step(step_context)
+
+    def execute_step(self, step_context):
+        pass
 
     def ready(self) -> bool:
         """Checks the tests is ready to start execution

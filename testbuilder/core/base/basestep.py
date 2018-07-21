@@ -10,30 +10,32 @@ class StepStatus(Enum):
     IN_PROGRESS = 4
 
 class StepContext:
-    def __init__(self, step):
+    def __init__(self, test):
+        from .basetest import TBBaseTest
+
+        if not isinstance(test, TBBaseTest):
+            raise TypeError("test must be of type TBBaseTest")
+        self.object_map = None
+        self.test = test
+        self.step_number = 0
+
+    def update_context(self, step, previous_context):
         if not isinstance(step, TBBaseStep):
-            raise TypeError("Step must be of type TBBaseStep")
+            raise TypeError("step must be of type TBBaseStep")
 
-        self.step_action = None
-        self.step_argument_1 = None
-        self.step_argument_2 = None
+        self.object_map = previous_context.object_map
+        self.test = previous_context.test
 
-        self.step_result = None
+        self.step_number = previous_context.step_number+1
 
-        self.next_step = None
+        self.step_action = step.get_action()
+        self.step_argument_1 = step.get_argument_1()
+        self.step_argument_2 = step.get_argument_2()
+
+        self.step_status = step.status
+
+        self.next_step = step.next_step
         self.step = step
-
-    def get_next_step(self) -> TBBaseStep:
-        """Returns the next step in test
-        
-        Returns:
-            TBBaseStep -- The next step in test
-        """
-
-        if self.next_step is not None:
-            return self.next_step
-        else:
-            return self.step.next_step
 
 class TBBaseStep:
     """
@@ -48,11 +50,10 @@ class TBBaseStep:
     If `previous_step` is None, then its the first step
     """
 
-    status=StepStatus.NOT_STARTED
-
     def __init__(self, *args, **kwargs):
         self.next_step=None
         self.previous_step=None
+        self.status=StepStatus.NOT_STARTED
 
         self.action=None
         self.argument_1=None
