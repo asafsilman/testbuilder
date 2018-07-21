@@ -2,6 +2,7 @@ import unittest
 from testbuilder.core.engine import TBEngine
 from testbuilder.core.base.baseinterface import TBBaseInterface
 from testbuilder.core.base.basemiddleware import TBBaseMiddleware
+from testbuilder.core.base.baseobjectmap import TBBaseObjectMapParser
 
 class TestTBEngine(unittest.TestCase):
     def setUp(self):
@@ -26,3 +27,14 @@ class TestTBEngine(unittest.TestCase):
             issubclass(self.engine.middlewares[middleware_name], TBBaseMiddleware),
             "Registered middleware is not of subclass TBBaseMiddleware"
         )
+
+    def test_load_objectmap_parser(self):
+        objectmap_parser_name = "python_objectmap_parser"
+        objectmap_parser_module = "testbuilder.objectmap.python"
+
+        self.engine.load_objectmap_parser(objectmap_parser_name, objectmap_parser_module)
+        self.assertTrue(
+            issubclass(self.engine.objectmap_parsers[objectmap_parser_name], TBBaseObjectMapParser),
+            "Registered middleware is not of subclass TBBaseObjectMapParser"
+        )
+

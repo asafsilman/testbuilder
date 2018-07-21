@@ -9,10 +9,35 @@ Global configuration file with all default vaues
 # Value: Interface location
 # 
 # Example
-# {"Basic": "testbuilder.interfaces.basic"}
-INSTALLED_INTERFACES = {}
+# {"Basic": "testbuilder.interface.basic"}
+INSTALLED_INTERFACES = {
+    "basic": "testbuilder.interface.basic"
+}
 
-INSTALLED_OBJECTMAPS = {}
+INSTALLED_MIDDLEWARES = {
+    "basic": "testbuilder.middleware.basic"
+}
+
+INSTALLED_OBJECTMAPS_PARSERS = {
+    "python": "testbuilder.objectmap.python"
+}
+
+INSTALLED_TESTLOADERS = {
+    "yaml": "testbuilder.loader.yamlloader"
+}
+
+INSTALLED_PROFILES = {
+    "default": {
+        "middlewares": [
+            "basic"
+        ]
+    }
+}
+
+OBJECT_MAPS = {
+    "basic": ("python", "testbuilder.objectmap.static.objectmap")
+}
+
 
 ##########################
 # Application Settings
@@ -23,19 +48,4 @@ APP_NAME = ""
 APP_LOGIN = {
     "username": "rmo_user",
     "password": "rmo_pass"
-}
-
-##########################
-# Test Loader Setting
-##########################
-LOADER_SETTINGS = {
-    "excel": {
-        "loader": None
-    },
-    "yaml": {
-        "loader": "testbuilder.loaders.yamlloader.loader.YAMLTestLoader",
-        "middlewares": [
-            ("basic", "testbuilder.middleware.basic")
-        ]
-    }
 }
