@@ -5,11 +5,11 @@ import unittest
 
 class TestPythonObjectMapParse(unittest.TestCase):
     def setUp(self):
-        object_map_path = "testbuilder.objectmap.static.objectmap"
-        self.parser = PythonObjectMapParse("test", object_map_path)
+        self.object_map_path = "testbuilder.objectmap.static.objectmap"
+        self.parser = PythonObjectMapParse()
 
     def test_parse(self):
-        object_map = self.parser.parse()
+        object_map = self.parser.parse("test", self.object_map_path)
 
         self.assertIsInstance(object_map, TBBaseObjectMap)
         self.assertTrue(object_map.ready())

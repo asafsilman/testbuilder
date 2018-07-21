@@ -33,8 +33,8 @@ class TestTBEngine(unittest.TestCase):
         objectmap_parser_module = "testbuilder.objectmap.python"
 
         self.engine.load_objectmap_parser(objectmap_parser_name, objectmap_parser_module)
-        self.assertTrue(
-            issubclass(self.engine.objectmap_parsers[objectmap_parser_name], TBBaseObjectMapParser),
-            "Registered middleware is not of subclass TBBaseObjectMapParser"
+        self.assertIsInstance(
+            self.engine.objectmap_parsers[objectmap_parser_name], TBBaseObjectMapParser,
+            "Registered middleware is not of instance TBBaseObjectMapParser"
         )
 
