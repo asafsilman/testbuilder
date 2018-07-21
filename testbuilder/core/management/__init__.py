@@ -2,7 +2,6 @@
 Placeholder for future implementation
 """
 
-from .load_tests import load_tests
 from .load_engine import load_engine
 
 import unittest
