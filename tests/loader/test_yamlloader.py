@@ -13,10 +13,7 @@ class TestYAMLTestLoader(unittest.TestCase):
         self.loader = YAMLTestLoader()
 
     def test_add_test(self):
-        self.loader.add_test(self.testcase_path)
-
-        self.assertEqual(len(self.loader.load_tests()), 1)
-        test = self.loader.load_tests()[0]
+        test = self.loader.load_test(self.testcase_path)
 
         self.assertEqual(test.test_name, 'sample_testcase')
         self.assertEqual(test.test_iterations, 1)

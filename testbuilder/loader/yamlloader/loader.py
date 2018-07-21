@@ -2,7 +2,6 @@
 
 import os
 import re
-from typing import List
 
 import yaml
 
@@ -16,22 +15,18 @@ from .yamlstep import YAMLStep
 
 
 class YAMLTestLoader(TBBaseTestLoader):
-    tests = []
 
-    def load_tests(self) -> List[TBBaseTest]:
-        return self.tests
-
-    def add_test(self, path) -> None:
+    def load_test(self, test_location) -> TBBaseTest:
         """Parse and add a test to tests
         
         Arguments:
             path {str} -- The path to the yaml test case
         """
-        if not os.path.exists(path):
-            raise ImproperlyConfigured(f"Path does not exist: {path}")
+        if not os.path.exists(test_location):
+            raise ImproperlyConfigured(f"Path does not exist: {test_location}")
 
         yaml_test_data = None
-        with open(path) as f:
+        with open(test_location) as f:
             yaml_test_data = yaml.load(f)
 
         # Check that test steps exists
@@ -58,7 +53,7 @@ class YAMLTestLoader(TBBaseTestLoader):
                 
                 if not os.path.exists(fixture_path): #If fixture is relative path
                     fixture_path = os.path.join(
-                        os.path.dirname(path), # Testcase path
+                        os.path.dirname(test_location), # Testcase path
                         fixture_path # Fixture path relative to testcase
                     )
                 fixture = CSVFixture(fixture_name, fixture_path) # Create fixutre
@@ -80,7 +75,7 @@ class YAMLTestLoader(TBBaseTestLoader):
 
         test.load_steps(first_step)
 
-        self.tests.append(test)
+        return test
 
     def load_test_step(self, step, test, first_step=None) -> YAMLStep:
         """Loads a test step
