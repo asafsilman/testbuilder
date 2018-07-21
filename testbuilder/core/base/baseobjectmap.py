@@ -3,13 +3,11 @@ from testbuilder.core.exceptions import ObjectMapException
 
 class TBBaseObjectMap:
     name=None
-    page=None
-    object_map={}
+    current_page=None
+    pages={}
 
-    def __init__(self, *args, **kwargs):
-        self.name = kwargs.get("name")
-        self.page = kwargs.get("page")
-        self.object_map = kwargs.get("object_map", {})
+    def __init__(self, name):
+        self.name = name
 
     def ready(self):
         """Is the objectmap ready
@@ -18,15 +16,116 @@ class TBBaseObjectMap:
             bool -- If the object map has loaded
         """
 
-        return bool(self.object_map)
+        if self.current_page is None: # Is the current_page set
+            return False
+        if not self.pages: # Is there atleast one page set
+            return False
 
-    def get_from_object_map(self, element_name):
+        # Are all pages ready
+        for page in self.pages:
+            if not self.pages[page].ready(): # A page is not ready
+                return False
+        return True
+
+    def load_page(self, page, page_name=None):
+        """Loads a objectmap Page to objectmap.
+
+        If `page_name` is None the name is taken from the `page.name` attribute
         
-        URI = self.object_map.get(element_name, None)
+        Arguments:
+            page {TBBasePage} -- Page to add
+        
+        Keyword Arguments:
+            page_name {str} -- The name of the page (default: {None})
+        """
 
-        if URI is None:
-            raise ObjectMapException(f"Unable to find element {element_name} in project {self.name}, page {self.page}")
+        if page_name is None:
+            page_name = page.name
+        self.pages[page_name] = page
 
-        interface_scheme,_,element = URI.partition(":")
+    def get_page_names(self):
+        return self.pages.keys()
 
-        return (interface_scheme, element)
+    def get_current_page(self):
+        return self.current_page
+
+    def switch_page(self, page_name):
+        if page_name in self.pages:
+            self.current_page = self.pages[page_name]
+        else:
+            raise ObjectMapException(f"Page name {page_name} is not in objectmap")
+
+    def get_element(self, element_name):
+        """Gets an element from the current page in objectmap
+        
+        Arguments:
+            element_name {str} -- The name of the element
+        
+        Raises:
+            ObjectMapException -- Raised when current_page is not set
+        
+        Returns:
+            Element -- The element from the objectmap
+        """
+
+        if self.current_page is None:
+            raise ObjectMapException("There is no page set as current_page")
+        return self.current_page.get_element(element_name)
+
+class TBBasePage:
+    name=None
+    properties={}
+    elements={}
+
+    def __init__(self, name, elements=None, properties=None):
+        self.name = name
+
+        self.elements = elements or {}
+        self.properties = properties or {}
+
+    def add_element(self, element_name, element_URI):
+        """Add element mapping to page
+        
+        Arguments:
+            element_name {str} -- The element name
+            element_URI {str} -- Element URI, In the format `<InterfacePrefix>:<Element>`
+        """
+
+        self.elements[element_name] = element_URI
+
+    def get_element(self, element_name):
+        element_URI = self.elements.get(element_name)
+
+        if element_URI is None:
+            raise ObjectMapException(f"Unable to find element {element_name} in page {self.name}")
+
+        return Element(element_name, element_URI)
+
+    def ready(self):
+        """Is the object map page ready
+        
+        Returns:
+            bool -- page ready
+        """
+
+        return bool(self.elements)
+    
+class Element:
+    element=None
+    element_name=None
+    interface_prefix=None
+
+    def __init__(self, element_name, element_URI):
+        """Loads a element from the objectmap
+        
+        Arguments:
+            element_name {str} -- Name of the element from objectmap
+            element_URI {str} -- Element URI, In the format `<InterfacePrefix>:<Element>`
+        """
+
+        self.element_name = element_name
+
+        interface_prefix,_,element = element_URI.partition(":")
+        
+        self.element=element
+        self.interface_prefix=interface_prefix
