@@ -17,6 +17,8 @@ class StepContext:
             raise TypeError("test must be of type TBBaseTest")
         self.object_map = None
         self.test = test
+
+        self.additional_settings = {}
         self.step_number = 0
 
     def update_context(self, step, previous_context):
@@ -26,6 +28,7 @@ class StepContext:
         self.object_map = previous_context.object_map
         self.test = previous_context.test
 
+        self.additional_settings = previous_context.additional_settings
         self.step_number = previous_context.step_number+1
 
         self.step_action = step.get_action()

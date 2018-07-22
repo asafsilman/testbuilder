@@ -24,9 +24,7 @@ class TBBaseTest:
     
     * Steps within a testcase
     * Maintaing the current step of the testcase
-    * Determine the next step in the testcase
     * Step Middlewares
-    * Results Middlewares
     """
 
     test_name=""
