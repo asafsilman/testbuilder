@@ -145,7 +145,7 @@ class TBBaseTest:
             # Step 1. Update context
             step_context.update_context(self.current_step, step_context)
 
-            # Step 2. Run middlewares for `before_step``
+            # Step 2. Run middlewares for `before_step`
             self.run_middlewares(step_context, MIDDLEWARE_MODE_BEFORE_STEP)
 
             # Step 3. Run Step
@@ -166,7 +166,22 @@ class TBBaseTest:
                 middleware.after_step(step_context)
 
     def execute_step(self, step_context):
-        pass
+        action_interface = step_context.action_interface
+
+        # If a step has a defined interface or not
+        if action_interface is None:
+            for interface in self.interfaces: # Go through each interface
+                try:
+                    self.interfaces[interface].dispatch(step_context)
+                    break
+                except ImproperlyConfigured: # Interface does not define action
+                    continue
+            else:
+                raise ImproperlyConfigured(f"No interface found that defines {step_context.step_action}")
+        else:
+            if action_interface not in self.interfaces:
+                raise ImproperlyConfigured(f"Interface {action_interface} is not installed")
+            self.interfaces[action_interface].dispatch(step_context)
 
     def ready(self) -> bool:
         """Checks the tests is ready to start execution

@@ -11,4 +11,3 @@ class ImproperlyConfigured(Exception):
 class ObjectMapException(Exception):
     """There is an issue related to the object map"""
     pass
-    

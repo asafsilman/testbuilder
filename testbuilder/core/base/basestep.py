@@ -31,11 +31,11 @@ class StepContext:
         self.additional_settings = previous_context.additional_settings
         self.step_number = previous_context.step_number+1
 
+        self.action_interface = None
+
         self.step_action = step.get_action()
         self.step_argument_1 = step.get_argument_1()
         self.step_argument_2 = step.get_argument_2()
-
-        self.step_status = step.status
 
         self.next_step = step.next_step
         self.step = step
@@ -58,9 +58,6 @@ class TBBaseStep:
         self.previous_step=None
         self.status=StepStatus.NOT_STARTED
 
-        self.action=None
-        self.argument_1=None
-        self.argument_2=None
         self.result=None
 
         self.action = kwargs.get("action")
