@@ -10,7 +10,7 @@ Testbuilder is the RMO's automation test framework. It is a robust framework tha
 ## Installing Instructions
 1. Install python > 3.7
 2. (optional) Create virtual environment `virtualenv -p <Python3.7Path> env`
-3. Install requirements `pip install requirements.txt`
+3. Install requirements `pip install -r requirements.txt`
 
 ## Running unittests
 Run command `python -m testbuilder test`
