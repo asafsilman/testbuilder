@@ -1,0 +1,13 @@
+---
+properties:
+  iterations: 1
+  test_name: sample_testcase
+
+steps:
+  - action: "ObjectMap"
+    argument_1: "basic"
+    argument_2: "Sample"
+  
+  - action: "LaunchApp"
+    argument_1: "calc"
+
