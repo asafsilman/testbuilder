@@ -3,6 +3,8 @@ from testbuilder.core.base.basetest import TBBaseTest
 from testbuilder.core.base.basestep import TBBaseStep
 
 from testbuilder.core.exceptions import StepException
+from testbuilder.interface.basic.interface import BasicInterface
+from testbuilder.middleware.basic.middleware import BasicMiddleware
 
 class TestTBBaseTest(unittest.TestCase):
     def setUp(self):
@@ -24,3 +26,16 @@ class TestTBBaseTest(unittest.TestCase):
     def test_add_step_wrong(self):
         with self.assertRaises(StepException):
             self.test.load_steps(self.step_2)
+
+    def test_ready(self):
+        self.test.run_test=True
+        self.assertFalse(self.test.ready())
+
+        self.test.interfaces["basic"] = BasicInterface()
+        self.assertFalse(self.test.ready())
+
+        self.test.middlewares.append(BasicMiddleware())
+        self.assertFalse(self.test.ready())
+
+        self.test.load_steps(self.step_1)
+        self.assertTrue(self.test.ready())
