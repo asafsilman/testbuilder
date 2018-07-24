@@ -5,6 +5,10 @@ setup(
     version="0.1",
     packages=find_packages(),
 
+    package_data = {
+        '': ['*.csv', '*.yaml'],
+    },
+
     install_requires=[
         "click==6.7",
         "PyYAML==3.13",
