@@ -9,6 +9,15 @@ def action_word(func):
 
 class TBBaseInterface:
     def dispatch(self, step_context):
+        """Attempts to dispatch a action to the interface
+        
+        Arguments:
+            step_context {StepContext} -- The current step context
+        
+        Raises:
+            ImproperlyConfigured -- Raised if interface does not define the action specified by `step_context.step_action`
+        """
+
         action = step_context.step_action
         defined_action_words = self.get_list_of_action_words()
 
@@ -28,6 +37,12 @@ class TBBaseInterface:
         step_context.step.status = StepStatus.FAILED
 
     def get_list_of_action_words(self):
+        """Helper function that returns list of add action words defined for the interface
+        
+        Returns:
+            [str] -- A list of action word names
+        """
+
         actions = []
 
         for item_name in dir(self):

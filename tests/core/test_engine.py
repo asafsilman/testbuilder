@@ -37,4 +37,3 @@ class TestTBEngine(unittest.TestCase):
             self.engine.objectmap_parsers[objectmap_parser_name], TBBaseObjectMapParser,
             "Registered middleware is not of instance TBBaseObjectMapParser"
         )
-

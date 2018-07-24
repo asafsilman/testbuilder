@@ -121,6 +121,13 @@ class TBBaseTest:
         self.interfaces[interface_name] = interface() # Create and register interface
 
     def load_object_map(self, object_map, object_map_name) -> None:
+        """Registers an objectmap for the test
+        
+        Arguments:
+            object_map {TBBaseObjectMap} -- The objectmap instance
+            object_map_name {str} -- Name of the objectmap
+        """
+
         if not isinstance(object_map, TBBaseObjectMap):
             raise ImproperlyConfigured("Objectmap is not of instance TBBaseObjectMap")
 
@@ -136,6 +143,23 @@ class TBBaseTest:
         return self.current_iteration
 
     def run(self):
+        """Runs the current test case. 
+
+        Steps taken to run test are
+
+        1. Create empty step context
+        2. Load first step
+        3. Update context for current step
+        4. Run middlewares for 'BEFORE_STEP'
+        5. Dispatch step to middlewares
+        6. Run middlewares for 'AFTER_STEP'
+        7. Update current Step
+        8. Go to step 3. Unless last step
+        
+        Raises:
+            ImproperlyConfigured -- If the test is not ready, this is raised
+        """
+
         if not self.ready():
             raise ImproperlyConfigured("Cannot start testcase because the test is not ready")
         
@@ -158,6 +182,15 @@ class TBBaseTest:
             self.current_step = step_context.next_step
 
     def run_middlewares(self, step_context, mode):
+        """Runs middlware depending on mode
+
+        Middlewares are always run in order of registration
+        
+        Arguments:
+            step_context {StepContext} -- The current step context
+            mode {int} -- The middleware run mode
+        """
+
         if mode == MIDDLEWARE_MODE_BEFORE_STEP:
             for middleware in self.middlewares:
                 middleware.before_step(step_context)

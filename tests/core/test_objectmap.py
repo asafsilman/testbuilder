@@ -78,4 +78,3 @@ class TestTBBasePage(unittest.TestCase):
 
         self.assertFalse(page.ready())
         self.assertTrue(self.page.ready())
-
