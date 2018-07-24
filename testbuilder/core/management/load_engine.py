@@ -2,8 +2,6 @@
 
 from testbuilder.conf import settings
 from testbuilder.core.engine import TBEngine
-from testbuilder.utils.module_loader import load_module
-
 
 def load_engine():
     """

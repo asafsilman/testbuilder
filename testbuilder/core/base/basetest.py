@@ -1,6 +1,4 @@
 """Base test class"""
-import importlib
-
 from testbuilder.core.exceptions import (
     StepException,
     ImproperlyConfigured
