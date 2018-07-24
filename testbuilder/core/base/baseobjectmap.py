@@ -71,6 +71,16 @@ class TBBaseObjectMap:
 
 class TBBasePage:
     def __init__(self, name, elements=None, properties=None):
+        """Create a TBBasePage instance
+        
+        Arguments:
+            name {str} -- Name of the page
+        
+        Keyword Arguments:
+            elements {dict} -- Optional dictionary of elements (default: {None})
+            properties {dict} -- Optional page properties (default: {None})
+        """
+
         self.name = name
 
         self.elements = elements or {}
