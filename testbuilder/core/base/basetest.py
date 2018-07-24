@@ -27,24 +27,22 @@ class TBBaseTest:
     * Step Middlewares
     """
 
-    test_name=""
-    
-    test_iterations=0
-    current_iteration=0
+    def __init__(self, *args, **kwargs):    
 
-    first_step=None
-    current_step=None
+        self.current_iteration=0
 
-    middlewares = [] # an ordered collection of middlewares
-    interfaces = {}
-    object_maps = {}
-    fixtures = {}
+        self.first_step=None
+        self.current_step=None
 
-    additional_properties = {}
+        self.middlewares = [] # an ordered collection of middlewares
+        self.interfaces = {}
+        self.object_maps = {}
+        self.fixtures = {}
 
-    def __init__(self, *args, **kwargs):
+        self.additional_properties = {}
         self.test_name = kwargs.get("test_name", "")
         self.test_iterations = kwargs.get("iterations", 0)
+        self.run_test = kwargs.get("run_test", False)
 
     def load_additional_property(self, key, value):
         """Add a additional test property to testcase
@@ -219,6 +217,7 @@ class TBBaseTest:
     def ready(self) -> bool:
         """Checks the tests is ready to start execution
 
+        * Checks if test is set to run
         * Checks steps are loaded
         * Checks middlewares are not empty
         * Checks interfaces are not empty
@@ -227,6 +226,10 @@ class TBBaseTest:
             Boolean -- Is the test ready
         """
 
+        ## Check test is set to run
+        if not self.run_test:
+            return False
+
         ## Check step
         if self.first_step is None:
             return False
@@ -234,7 +237,8 @@ class TBBaseTest:
         ## Check middleware
         if self.middlewares:
             for middleware in self.middlewares: # check each middleware is ready
-                if middleware.ready(): continue
+                if middleware.ready():
+                    continue
                 else: return False # an interface is not ready
         else: # no middlewares loaded
             return False

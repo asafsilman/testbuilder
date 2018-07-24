@@ -66,40 +66,41 @@ class TBEngine:
     def load_profile(self, profile_name, profile) -> None:
         self.profiles[profile_name] = profile
 
-    def create_test(self, test_location, loader_name, profile_name):
+    def create_tests(self, test_location, loader_name, profile_name):
         if loader_name not in self.testloaders:
             raise ImproperlyConfigured(f"No testloader installed named {loader_name}")
         if profile_name not in self.profiles:
             raise ImproperlyConfigured(f"No profile installed named {profile_name}")
         
-        test = self.testloaders[loader_name].load_test(test_location)
+        # Returns a list of tests from file
+        tests = self.testloaders[loader_name].load_tests(test_location)
 
-        
-        profile = self.profiles[profile_name]
+        for test in tests:
+            profile = self.profiles[profile_name]
 
-        ## Step 1. Load middlewares
-        if "middlewares" in profile:
-            for middleware_name in profile["middlewares"]:
-                middleware = self.middlewares[middleware_name]
-                test.load_middleware(middleware)
+            ## Step 1. Load middlewares
+            if "middlewares" in profile:
+                for middleware_name in profile["middlewares"]:
+                    middleware = self.middlewares[middleware_name]
+                    test.load_middleware(middleware)
 
-        ## Step 2. Load interfaces
-        for interface_name, interface in self.interfaces.items():
-            test.load_interface(interface, interface_name)
+            ## Step 2. Load interfaces
+            for interface_name, interface in self.interfaces.items():
+                test.load_interface(interface, interface_name)
 
-        ## Step 3. Load objectmap
-        for objectmap_name in settings["OBJECT_MAPS"]:
-            obj_parser_name, obj_location = settings["OBJECT_MAPS"][objectmap_name]
+            ## Step 3. Load objectmap
+            for objectmap_name in settings["OBJECT_MAPS"]:
+                obj_parser_name, obj_location = settings["OBJECT_MAPS"][objectmap_name]
 
-            if obj_parser_name not in self.objectmap_parsers:
-                raise ImproperlyConfigured(f"ObjectMap Parser {obj_parser_name} is not installed")
+                if obj_parser_name not in self.objectmap_parsers:
+                    raise ImproperlyConfigured(f"ObjectMap Parser {obj_parser_name} is not installed")
 
-            obj_parser = self.objectmap_parsers[obj_parser_name]
-            object_map = obj_parser.parse(objectmap_name, obj_location)
+                obj_parser = self.objectmap_parsers[obj_parser_name]
+                object_map = obj_parser.parse(objectmap_name, obj_location)
 
-            test.load_object_map(object_map, objectmap_name)
+                test.load_object_map(object_map, objectmap_name)
 
-        return test
+        return tests
 
     def ready(self) -> None:
         """Checks the engine is ready to start executing test scripts

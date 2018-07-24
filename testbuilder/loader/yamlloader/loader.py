@@ -13,10 +13,12 @@ from testbuilder.fixture.csv_fixture import CSVFixture
 
 from .yamlstep import YAMLStep
 
+from typing import List
+
 
 class YAMLTestLoader(TBBaseTestLoader):
 
-    def load_test(self, test_location) -> TBBaseTest:
+    def load_tests(self, test_location) -> List[TBBaseTest]:
         """Parse and add a test to tests
         
         Arguments:
@@ -75,7 +77,7 @@ class YAMLTestLoader(TBBaseTestLoader):
 
         test.load_steps(first_step)
 
-        return test
+        return [test]
 
     def load_test_step(self, step, test, first_step=None) -> YAMLStep:
         """Loads a test step

@@ -2,6 +2,7 @@
 properties:
   iterations: 1
   test_name: sample_testcase
+  run_test: True
 
 steps:
   - action: "ObjectMap"

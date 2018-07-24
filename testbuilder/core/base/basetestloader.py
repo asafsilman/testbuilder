@@ -3,7 +3,7 @@ from typing import List
 from .basetest import TBBaseTest
 
 class TBBaseTestLoader:
-    def load_tests(self, test_location) -> TBBaseTest:
+    def load_tests(self, test_location) -> List[TBBaseTest]:
         """Overwrite this function. Returns a testscase.
         
         Returns:

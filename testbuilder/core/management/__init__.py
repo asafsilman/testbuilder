@@ -9,9 +9,12 @@ import unittest
 def run_test_case(file, file_type, profile):
     engine = load_engine()
 
-    test = engine.create_test(file, file_type, profile)
+    tests = engine.create_tests(file, file_type, profile)
 
-    test.run()
+    for test in tests:
+        print(test.run_test)
+        if test.run_test:
+            test.run()
 
 def run_unittests(verbose):
     package_tests = unittest.TestLoader().discover(start_dir="tests")

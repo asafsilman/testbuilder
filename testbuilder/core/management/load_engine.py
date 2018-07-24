@@ -6,12 +6,18 @@ from testbuilder.utils.module_loader import load_module
 
 
 def load_engine():
+    """
+    Create a TBEngine instance, load all settings from testbuilder settings
+
+    Returns:
+        TBEngine -- The loaded engine instance
+    """
     engine=TBEngine()
 
     ## Step 1. Load Interfaces
     for interface_name in settings["INSTALLED_INTERFACES"]:
         interface_module = settings["INSTALLED_INTERFACES"][interface_name]
-        
+
         engine.load_interface(interface_name, interface_module)
 
     ## Step 2. Load Middlwares

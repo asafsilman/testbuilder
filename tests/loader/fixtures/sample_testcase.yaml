@@ -1,6 +1,7 @@
 ---
 properties:
   iterations: 1
+  run_test: True
   test_name: sample_testcase
 
 additional_properties:
