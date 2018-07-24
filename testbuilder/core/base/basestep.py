@@ -8,6 +8,7 @@ class StepStatus(Enum):
     FAILED = 2
     NOT_STARTED = 3
     IN_PROGRESS = 4
+    SKIPPED = 5
 
 class StepContext:
     def __init__(self, test):
@@ -28,6 +29,8 @@ class StepContext:
         self.object_map = previous_context.object_map
         self.test = previous_context.test
 
+        self.step = step
+
         self.additional_settings = previous_context.additional_settings
         self.step_number = previous_context.step_number+1
 
@@ -38,7 +41,6 @@ class StepContext:
         self.step_argument_2 = step.get_argument_2()
 
         self.next_step = step.next_step
-        self.step = step
 
 class TBBaseStep:
     """
