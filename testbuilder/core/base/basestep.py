@@ -37,8 +37,12 @@ class StepContext:
         self.action_interface = None
 
         self.step_action = step.get_action()
+        
         self.step_argument_1 = step.get_argument_1()
+        self.step_argument_1_mapped = None # To be filled in by objectmap middleware
+
         self.step_argument_2 = step.get_argument_2()
+        self.step_argument_2_mapped = None # To be filled in by objectmap middleware
 
         self.next_step = step.next_step
 
