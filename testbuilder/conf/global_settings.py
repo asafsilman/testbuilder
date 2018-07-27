@@ -2,6 +2,8 @@
 Global configuration file with all default vaues
 """
 
+import os
+
 # Collection of installed interfaces
 # 
 # Structure
@@ -39,9 +41,9 @@ OBJECT_MAPS = {
 }
 
 
-##########################
+####################################################
 # Application Settings
-##########################
+####################################################
 
 APP_DIRECTORY = ""
 APP_NAME = ""
@@ -49,3 +51,18 @@ APP_LOGIN = {
     "username": "rmo_user",
     "password": "rmo_pass"
 }
+
+####################################################
+# Selenium Interface Settings
+####################################################
+SELENIUM_DRIVER_BASE_PATH = os.environ.get("SELENIUM_DRIVER_BASE_PATH")
+
+SELENIUM_CHROME_DRIVER = "chromedriver_2_25"
+SELENIUM_CHROME_VERSION = (2,25)
+
+SELENIUM_FIREFOX_DRIVER = "geckodriver"
+SELENIUM_FIREFOX_VERSION = (0,21)
+
+SELENIUM_IMPLICIT_WAIT = 10 # Seconds
+
+SELENIUM_RETRY_ATTEMPTS = 5
