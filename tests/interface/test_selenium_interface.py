@@ -4,6 +4,7 @@ from testbuilder.core.base.basestep import (StepContext, TBBaseStep)
 
 import unittest
 
+@unittest.skip
 class TestSeleniumInterface(unittest.TestCase):
     def setUp(self):
         self.interface = SeleniumInterface()
@@ -37,6 +38,7 @@ class TestSeleniumInterface(unittest.TestCase):
         if self.interface.driver is not None:
             self.interface.driver.close()
 
+@unittest.skip
 class TestSeleniumInterfaceChrome(unittest.TestCase):
     def setUp(self):
         self.interface = SeleniumInterface()
