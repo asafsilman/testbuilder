@@ -12,7 +12,8 @@ setup(
     install_requires=[
         "click==6.7",
         "PyYAML==3.13",
-        "pandas==0.23.3"
+        "pandas==0.23.3",
+        "selenium==3.13.0"
     ],
 
     author="Asaf Silman",
