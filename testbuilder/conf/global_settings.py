@@ -57,7 +57,7 @@ APP_LOGIN = {
 ####################################################
 SELENIUM_DRIVER_BASE_PATH = os.environ.get("SELENIUM_DRIVER_BASE_PATH")
 
-SELENIUM_CHROME_DRIVER = "chromedriver_2_25"
+SELENIUM_CHROME_DRIVER = "chromedriver"
 SELENIUM_CHROME_VERSION = (2,25)
 
 SELENIUM_FIREFOX_DRIVER = "geckodriver"
