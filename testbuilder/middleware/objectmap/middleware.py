@@ -11,13 +11,16 @@ class ObjectMapMiddleware(TBBaseMiddleware):
         # Map argument 1
         try:
             arg1 = step_context.step_argument_1
-            step_context.step_argument_1_mapped = step_context.object_map.get_element(arg1)
+            element = step_context.object_map.get_element(arg1)
+            step_context.step_argument_1_mapped = element.element
+            step_context.action_interface = element.interface_prefix
         except ObjectMapException:
-            return
+            pass
 
         # Map argument 2
         try:
             arg2 = step_context.step_argument_2
-            step_context.step_argument_2_mapped = step_context.object_map.get_element(arg2)
+            element = step_context.object_map.get_element(arg2)
+            step_context.step_argument_2_mapped = element.element
         except ObjectMapException:
-            return
+            pass
