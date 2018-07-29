@@ -4,11 +4,11 @@ properties:
   test_name: sample_testcase
   run_test: True
 
-steps:
-  - action: "ObjectMap"
-    argument_1: "basic"
-    argument_2: "Sample"
-  
-  - action: "LaunchApp"
-    argument_1: "calc"
-
+steps: [
+  {action: "ObjectMap", argument_1: "basic", argument_2: "Sample"},
+  {action: "LaunchApp", argument_1: "calc"},
+  {action: "Click", argument_1: "Button 5"},
+  {action: "Click", argument_1: "Button +"},
+  {action: "Click", argument_1: "Button 9"},
+  {action: "Click", argument_1: "Button Equal"}
+]
