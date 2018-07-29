@@ -1,0 +1,1 @@
+interface_entry="testbuilder.interface.selenium.interface.SeleniumInterface"

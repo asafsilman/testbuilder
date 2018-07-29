@@ -1,6 +1,5 @@
 """Basic action word interface"""
 
-
 from testbuilder.core.base.baseinterface import TBBaseInterface, action_word
 from testbuilder.core.exceptions import (ImproperlyConfigured, ActionWordException)
 from testbuilder.core.base.basestep import StepStatus

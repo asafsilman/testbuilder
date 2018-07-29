@@ -9,5 +9,6 @@ pylint==2.0.0
 python-dateutil==2.7.3
 pytz==2018.5
 PyYAML==3.13
+selenium==3.13.0
 six==1.11.0
 wrapt==1.10.11
