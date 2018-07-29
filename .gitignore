@@ -9,6 +9,7 @@ __pycache__
 
 # System files
 .DS_STORE
+~$*
 
 # Log files
 *.log

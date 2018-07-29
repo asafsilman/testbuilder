@@ -66,3 +66,11 @@ SELENIUM_FIREFOX_VERSION = (0,21)
 SELENIUM_IMPLICIT_WAIT = 10 # Seconds
 
 SELENIUM_RETRY_ATTEMPTS = 5
+
+####################################################
+# Excel Loader Settings
+####################################################
+DASHBOARD_SHEET_NAME = "Dashboard"
+
+EXCEL_ENVIRONMENT = "B3"
+TEST_TABLE_START = "A8"
