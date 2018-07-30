@@ -27,6 +27,7 @@ class TBBaseInterface:
                 self._pass_step(step_context) # Mark step as passed
             except Exception as e:
                 self._fail_step(step_context, e) # Mark step as failed
+                raise
         else:
             raise ImproperlyConfigured(f"Interface does not have a defined action {action}")
 
