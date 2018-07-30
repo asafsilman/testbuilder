@@ -12,7 +12,6 @@ def run_test_case(file, file_type, profile):
     tests = engine.create_tests(file, file_type, profile)
 
     for test in tests:
-        print(test.run_test)
         if test.run_test:
             test.run()
 
