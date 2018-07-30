@@ -1,0 +1,1 @@
+middleware_entry="testbuilder.middleware.logging.middleware.LoggingMiddleware"

@@ -3,6 +3,7 @@ Global configuration file with all default vaues
 """
 
 import os
+import logging
 
 # Collection of installed interfaces
 # 
@@ -13,11 +14,14 @@ import os
 # Example
 # {"Basic": "testbuilder.interface.basic"}
 INSTALLED_INTERFACES = {
-    "basic": "testbuilder.interface.basic"
+    "basic": "testbuilder.interface.basic",
+    "selenium": "testbuilder.interface.selenium"
 }
 
 INSTALLED_MIDDLEWARES = {
-    "basic": "testbuilder.middleware.basic"
+    "basic": "testbuilder.middleware.basic",
+    "objectmap": "testbuilder.middleware.objectmap",
+    "loggging": "testbuilder.middleware.logging"
 }
 
 INSTALLED_OBJECTMAPS_PARSERS = {
@@ -31,7 +35,9 @@ INSTALLED_TESTLOADERS = {
 INSTALLED_PROFILES = {
     "default": {
         "middlewares": [
-            "basic"
+            "basic",
+            "objectmap",
+            "loggging"
         ]
     }
 }
@@ -40,6 +46,11 @@ OBJECT_MAPS = {
     "basic": ("python", "testbuilder.objectmap.static.objectmap")
 }
 
+####################################################
+# Logging Settings
+####################################################
+
+LOG_LEVEL = logging.INFO
 
 ####################################################
 # Application Settings
