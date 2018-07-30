@@ -5,6 +5,7 @@ from testbuilder.core.exceptions import (ImproperlyConfigured, ActionWordExcepti
 from testbuilder.core.base.basestep import StepStatus
 
 import os
+import time
 
 class BasicInterface(TBBaseInterface):
     @action_word
@@ -23,7 +24,7 @@ class BasicInterface(TBBaseInterface):
         object_map_page = step_context.step_argument_2
 
         if object_map_name not in test.object_maps:
-            raise ImproperlyConfigured(f"Test does not have installed objectmap {object_map_name}")
+            raise ActionWordException(f"Test does not have installed objectmap {object_map_name}")
 
         step_context.object_map = test.object_maps[object_map_name]
         step_context.object_map.switch_page(object_map_page)
@@ -68,6 +69,11 @@ class BasicInterface(TBBaseInterface):
     @action_word
     def EndIf(self, step_context):
         pass
+
+    @action_word
+    def Sync(self, step_context):
+        arg1 = step_context.step_argument_1
+        time.sleep(arg1)
 
     @action_word
     def LaunchApp(self, step_context):

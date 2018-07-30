@@ -195,6 +195,7 @@ class TBBaseTest:
             try:
                 self.execute_step(step_context)
             except Exception as e:
+                step_context.step_settings["Exception"] = e
                 self.run_middlewares(step_context, MIDDLEWARE_MODE_STEP_FAILURE)
                 break
 

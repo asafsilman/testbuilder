@@ -18,6 +18,8 @@ class SeleniumInterface(TBBaseInterface):
         self.driver_base_path = settings["SELENIUM_DRIVER_BASE_PATH"]
         self.implicit_wait = settings["SELENIUM_IMPLICIT_WAIT"] or 0
 
+        self.retries = settings["SELENIUM_RETRY_ATTEMPTS"]
+
     @action_word
     def LaunchDriver(self, step_context):
         """Launches a selenium webdriver
@@ -82,7 +84,7 @@ class SeleniumInterface(TBBaseInterface):
     @action_word
     def Type(self, step_context):
         """Types some text to a selenium webelement
-        
+
         Arguments:
             step_context {StepContext} -- The current step context
         """
@@ -90,6 +92,7 @@ class SeleniumInterface(TBBaseInterface):
         xpath = step_context.step_argument_1_mapped
         text = str(step_context.step_argument_2)
 
+        self.Exist(step_context)
         element = self.driver.find_element_by_xpath(xpath)
         element.send_keys(text)
 
@@ -102,10 +105,11 @@ class SeleniumInterface(TBBaseInterface):
         """
 
         xpath = step_context.step_argument_1_mapped
-        
+
+        self.Exist(step_context)
         element = self.driver.find_element_by_xpath(xpath)
         element.click()
-
+        
     def wait_for_element_condition(self, condition, xpath, timeout=None):
         if timeout is None: timeout = self.implicit_wait
         
@@ -122,9 +126,8 @@ class SeleniumInterface(TBBaseInterface):
     @action_word
     def Exist(self, step_context):
         xpath = step_context.step_argument_1_mapped
-        retries = settings["SELENIUM_RETRY_ATTEMPTS"]
 
-        for _ in range(retries):
+        for _ in range(self.retries):
             condition = all([
                 self.wait_for_element_condition("element_to_be_clickable", xpath),
                 self.wait_for_element_condition("visibility_of_element_located", xpath),

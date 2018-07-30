@@ -31,6 +31,8 @@ class StepContext:
 
         self.step = step
 
+        self.step_settings = {}
+
         self.additional_settings = previous_context.additional_settings
         self.step_number = previous_context.step_number+1
 
@@ -123,3 +125,10 @@ class TBBaseStep:
         if callable(self.result):
             return self.result() #pylint: disable=E1102
         return self.result
+
+    def __str__(self):
+        return "<TBBaseStep Action={}, arg1={}, arg2={}>".format(
+            self.get_action(),
+            self.get_argument_1(),
+            self.get_argument_2()
+        )

@@ -122,7 +122,9 @@ class YAMLTestLoader(TBBaseTestLoader):
         return step
 
     def get_step_field(self, field, test, first_step):
-        if field is None:
+        if not isinstance(field, str):
+            return field
+        elif field is None:
             return ""
         elif re.match(r"^\$settings\.", field, flags=re.IGNORECASE):
             return self._step_field_from_settings(field)
