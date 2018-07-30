@@ -65,7 +65,8 @@ class SeleniumInterface(TBBaseInterface):
 
     @action_word
     def CloseDriver(self, step_context):
-        self.driver.close()
+        if self.driver is not None:
+            self.driver.close()
 
     @action_word
     def Navigate(self, step_context):

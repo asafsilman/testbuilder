@@ -11,6 +11,9 @@ from testbuilder.core.base.baseobjectmap import TBBaseObjectMap
 
 MIDDLEWARE_MODE_BEFORE_STEP = 1
 MIDDLEWARE_MODE_AFTER_STEP = 2
+MIDDLEWARE_MODE_STEP_FAILURE = 3
+MIDDLEWARE_MODE_TEARDOWN_BEFORE_STEP = 4
+MIDDLEWARE_MODE_TEARDOWN_AFTER_STEP = 5
 
 class TBBaseTest:
     """
@@ -31,6 +34,8 @@ class TBBaseTest:
 
         self.first_step=None
         self.current_step=None
+
+        self.tear_down_first_step = None
 
         self.middlewares = [] # an ordered collection of middlewares
         self.interfaces = {}
@@ -90,6 +95,24 @@ class TBBaseTest:
             raise StepException("This is not the first step of the test")
         self.first_step = first_step
         self.current_step = self.first_step
+
+    def load_tear_down_steps(self, first_step) -> None:
+        """Loads the first step for the teardown
+        
+        Arguments:
+            first_step {TBBaseStep} -- The first step of the teardown
+        
+        Returns:
+            TypeError -- Raised if `first_step` is not of type TBBaseStep
+            StepException -- Raised if the step is't the first Step
+        """
+
+        if not isinstance(first_step, TBBaseStep):
+            raise TypeError("Excpected 'first_step' to by of type TBBaseStep")
+        if not first_step.is_first_step():
+            raise StepException("This is not the first step of the test")
+
+        self.tear_down_first_step = first_step
 
     def load_middleware(self, middleware) -> None:
         """Creates and appends middleware to list of middleswares.
@@ -169,12 +192,28 @@ class TBBaseTest:
             self.run_middlewares(step_context, MIDDLEWARE_MODE_BEFORE_STEP)
 
             # Step 3. Run Step
-            self.execute_step(step_context)
+            try:
+                self.execute_step(step_context)
+            except Exception as e:
+                self.run_middlewares(step_context, MIDDLEWARE_MODE_STEP_FAILURE)
+                break
 
             # Step 4. Run middleswares for `after_step`
             self.run_middlewares(step_context, MIDDLEWARE_MODE_AFTER_STEP)
 
             # Step 5. Update step
+            self.current_step = step_context.next_step
+
+
+        # Prepare TearDown Steps
+        self.current_step = self.tear_down_first_step
+        
+        # Step 6. Run TearDown steps
+        while self.current_step is not None:
+            step_context.update_context(self.current_step, step_context)
+            self.run_middlewares(step_context, MIDDLEWARE_MODE_TEARDOWN_BEFORE_STEP)
+            self.execute_step(step_context)
+            self.run_middlewares(step_context, MIDDLEWARE_MODE_TEARDOWN_AFTER_STEP)
             self.current_step = step_context.next_step
 
     def run_middlewares(self, step_context, mode):
@@ -193,6 +232,15 @@ class TBBaseTest:
         elif mode == MIDDLEWARE_MODE_AFTER_STEP:
             for middleware in self.middlewares:
                 middleware.after_step(step_context)
+        elif mode == MIDDLEWARE_MODE_STEP_FAILURE:
+            for middleware in self.middlewares:
+                middleware.step_failure(step_context)
+        elif mode == MIDDLEWARE_MODE_TEARDOWN_BEFORE_STEP:
+            for middleware in self.middlewares:
+                middleware.tear_down_before_step(step_context)
+        elif mode == MIDDLEWARE_MODE_TEARDOWN_AFTER_STEP:
+            for middleware in self.middlewares:
+                middleware.tear_down_after_step(step_context)
 
     def execute_step(self, step_context):
         action_interface = step_context.action_interface
