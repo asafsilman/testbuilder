@@ -21,7 +21,7 @@ INSTALLED_INTERFACES = {
 INSTALLED_MIDDLEWARES = {
     "basic": "testbuilder.middleware.basic",
     "objectmap": "testbuilder.middleware.objectmap",
-    "loggging": "testbuilder.middleware.logging"
+    "logging": "testbuilder.middleware.logging"
 }
 
 INSTALLED_OBJECTMAPS_PARSERS = {
@@ -37,7 +37,7 @@ INSTALLED_PROFILES = {
         "middlewares": [
             "basic",
             "objectmap",
-            "loggging"
+            "logging"
         ]
     }
 }
