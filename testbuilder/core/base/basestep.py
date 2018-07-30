@@ -123,3 +123,10 @@ class TBBaseStep:
         if callable(self.result):
             return self.result() #pylint: disable=E1102
         return self.result
+
+    def __str__(self):
+        return "<TBBaseStep Action={}, arg1={}, arg2={}>".format(
+            self.get_action(),
+            self.get_argument_1(),
+            self.get_argument_2()
+        )
