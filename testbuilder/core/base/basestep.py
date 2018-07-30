@@ -31,6 +31,8 @@ class StepContext:
 
         self.step = step
 
+        self.step_settings = {}
+
         self.additional_settings = previous_context.additional_settings
         self.step_number = previous_context.step_number+1
 

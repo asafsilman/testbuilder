@@ -23,7 +23,7 @@ class BasicInterface(TBBaseInterface):
         object_map_page = step_context.step_argument_2
 
         if object_map_name not in test.object_maps:
-            raise ImproperlyConfigured(f"Test does not have installed objectmap {object_map_name}")
+            raise ActionWordException(f"Test does not have installed objectmap {object_map_name}")
 
         step_context.object_map = test.object_maps[object_map_name]
         step_context.object_map.switch_page(object_map_page)
