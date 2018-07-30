@@ -77,6 +77,24 @@ class YAMLTestLoader(TBBaseTestLoader):
 
         test.load_steps(first_step)
 
+        # Load teardown steps
+        tear_down_steps = yaml_test_data.get("tear_down")
+        first_step = None
+        _cur_step = None
+
+        # Load test steps
+        if tear_down_steps is not None:
+            for i, step in enumerate(tear_down_steps):
+                if i == 0: # First step
+                    first_step = self.load_test_step(step, test)
+                    _cur_step = first_step
+                    continue
+                next_step = self.load_test_step(step, test, first_step) # Load the next step
+                _cur_step.add_next_step(next_step) # Register the next step
+                _cur_step = next_step # Replace current step with next step
+
+            test.load_tear_down_steps(first_step)
+
         return [test]
 
     def load_test_step(self, step, test, first_step=None) -> YAMLStep:
