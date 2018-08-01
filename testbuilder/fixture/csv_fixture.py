@@ -14,15 +14,15 @@ class CSVFixture(TBBaseFixture):
         self.fixture_data = pandas.read_csv(csv_path, **kwargs)
         super().__init__(fixture_name)
 
-    def get_value(self, iteration, column):
-        """Get the value from the fixture for the current iteration
+    def get_value(self, row, column):
+        """Get the value from the fixture
         
         Arguments:
-            iteration {int} -- Iteration number
+            row {int} -- row number
             column {str} -- Column name
         
         Returns:
             any -- Value from fixture
         """
 
-        return self.fixture_data.iloc[iteration][column]
+        return self.fixture_data.iloc[row][column]

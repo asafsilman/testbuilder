@@ -44,7 +44,7 @@ class TBBaseTest:
 
         self.additional_properties = {}
         self.test_name = kwargs.get("test_name", "")
-        self.test_iterations = kwargs.get("iterations", 0)
+        self.test_iterations = kwargs.get("iterations", 1)
         self.run_test = kwargs.get("run_test", False)
 
     def load_additional_property(self, key, value):
@@ -160,6 +160,10 @@ class TBBaseTest:
         """
 
         return self.current_iteration
+
+    def configure_next_iteration(self) -> None:
+        self.current_iteration += 1
+        self.current_step = self.first_step
 
     def run(self):
         """Runs the current test case. 
