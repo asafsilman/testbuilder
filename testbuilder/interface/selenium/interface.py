@@ -145,7 +145,7 @@ class SeleniumInterface(TBBaseInterface):
 
         temp_wait = self.implicit_wait # Maintain this value
         
-        self.set_implicit_wait(temp_wait/2)
+        self.set_implicit_wait(temp_wait/3)
         condition = all([
             self.wait_for_element_condition("element_to_be_clickable", xpath),
             self.wait_for_element_condition("visibility_of_element_located", xpath),
