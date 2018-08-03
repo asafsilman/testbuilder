@@ -10,5 +10,10 @@ __pycache__
 # System files
 .DS_STORE
 
+# Distribution files
+build/
+dist/
+*.egg-info/
+
 # Log files
 *.log
