@@ -36,6 +36,8 @@ class BasicInterface(TBBaseInterface):
 
         if arg1 == arg2:
             return
+        elif arg1 == True and arg2 is None:
+            return
         else:
             current_step = step_context.step
             next_step = self.find_matching_step(current_step, "If", "EndIf")
