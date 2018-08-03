@@ -194,3 +194,19 @@ class SeleniumInterface(TBBaseInterface):
     @action_word
     def SwitchToDefaultFrame(self, step_context):
         self.driver.switch_to_default_content()
+
+    @action_word
+    def CheckExist(self, step_context):
+        xpath = step_context.step_argument_1_mapped
+
+        temp_wait = self.implicit_wait # Maintain this value
+        
+        self.set_implicit_wait(temp_wait/3)
+        condition = all([
+            self.wait_for_element_condition("element_to_be_clickable", xpath),
+            self.wait_for_element_condition("visibility_of_element_located", xpath),
+            self.wait_for_element_condition("presence_of_element_located", xpath)
+        ])
+        self.set_implicit_wait(temp_wait)
+
+        step_context.step.result = condition
