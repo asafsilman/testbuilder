@@ -54,6 +54,7 @@ class SeleniumInterface(TBBaseInterface):
             options.add_experimental_option("useAutomationExtension", False)
 
         self.driver = webdriver.Chrome(executable_path=driver_path, options=options)
+        self.driver.maximize_window()
 
     def _launch_firefox(self):
         driver_executable = settings["SELENIUM_FIREFOX_DRIVER"]
