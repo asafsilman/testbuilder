@@ -1,5 +1,4 @@
-# After changing this file, check it on:
-#   http://lint.travis-ci.org/
+# TRAVIS CONFIG
 language: python
 sudo: required
 dist: trusty
