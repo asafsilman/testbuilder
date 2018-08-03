@@ -138,4 +138,50 @@ class SeleniumInterface(TBBaseInterface):
                 break
         else: # If all iterations passed, but still no element
             raise Exception("Element {0} not found")
+
+    @action_word
+    def ExistFormatted(self, step_context):
+        xpath = step_context.step_argument_1_mapped
+        formatting = step_context.step_argument_2.split(';')
+
+        step_context.step_argument_1_mapped = xpath.format(*formatting)
+
+        self.Exist(step_context)
+
+    @action_word
+    def ClickFormatted(self, step_context):
+        xpath = step_context.step_argument_1_mapped
+        formatting = step_context.step_argument_2.split(';')
+
+        step_context.step_argument_1_mapped = xpath.format(*formatting)
+
+        self.Click(step_context)
         
+    @action_word
+    def SwitchFrame(self, step_context):
+        xpath = step_context.step_argument_1_mapped
+
+        frame = self.driver.find_element_by_xpath(xpath)
+
+        self.driver.switch_to_default_content()
+        self.driver.switch_to_frame(frame)
+    
+    @action_word
+    def SwitchToDefaultFrame(self, step_context):
+        self.driver.switch_to_default_content()
+
+    @action_word
+    def CheckExist(self, step_context):
+        xpath = step_context.step_argument_1_mapped
+
+        temp_wait = self.implicit_wait # Maintain this value
+        
+        self.set_implicit_wait(temp_wait/3)
+        condition = all([
+            self.wait_for_element_condition("element_to_be_clickable", xpath),
+            self.wait_for_element_condition("visibility_of_element_located", xpath),
+            self.wait_for_element_condition("presence_of_element_located", xpath)
+        ])
+        self.set_implicit_wait(temp_wait)
+
+        step_context.step.result = condition
