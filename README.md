@@ -1,6 +1,8 @@
-[![Build Status](https://travis-ci.com/AsafSilman/testbuilder.svg?branch=master)](https://travis-ci.com/AsafSilman/testbuilder)
-
 # TestBuilder
+
+[![Build Status](https://travis-ci.com/AsafSilman/testbuilder.svg?branch=master)](https://travis-ci.com/AsafSilman/testbuilder)
+[![codecov](https://codecov.io/gh/AsafSilman/testbuilder/branch/master/graph/badge.svg)](https://codecov.io/gh/AsafSilman/testbuilder)
+
 Testbuilder is a automation test framework. It is a robust framework that is adaptiable and configurable for a number of use case scenarios such as
 * Regression Testing
 * Integration Testing
