@@ -1,13 +1,8 @@
 # TRAVIS CONFIG
 language: python
-sudo: required
-dist: trusty
 
 python:
   - 3.7
-virtualenv:
-    system_site_package: true
-before_install:
+install:
  - pip install -r requirements.txt
-script:
- - if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then python -m unittest discover; fi
+script: python -m unittest discover; fi
