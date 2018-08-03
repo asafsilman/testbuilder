@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/AsafSilman/testbuilder.svg?branch=master)](https://travis-ci.com/AsafSilman/testbuilder)
+
 # TestBuilder
 Testbuilder is a automation test framework. It is a robust framework that is adaptiable and configurable for a number of use case scenarios such as
 * Regression Testing
