@@ -185,3 +185,15 @@ class SeleniumInterface(TBBaseInterface):
         self.set_implicit_wait(temp_wait)
 
         step_context.step.result = condition
+
+    @action_word
+    def SwitchWindow(self, step_context):
+        window_name = step_context.step_argument_1
+        for _ in range(self.retries):
+            try:
+                self.driver.switch_to.window(window_name)
+                break
+            except WebDriverException:
+                time.sleep(self.implicit_wait)
+        else:
+            raise Exception(f"Could not witch to window {window_name}")
