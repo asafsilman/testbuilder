@@ -1,5 +1,5 @@
 # TestBuilder
-Testbuilder is the RMO's automation test framework. It is a robust framework that is adaptiable and configurable for a number of use case scenarios such as
+Testbuilder is a automation test framework. It is a robust framework that is adaptiable and configurable for a number of use case scenarios such as
 * Regression Testing
 * Integration Testing
 * Performance Testing (including the following)

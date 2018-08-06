@@ -95,20 +95,6 @@ class SeleniumInterface(TBBaseInterface):
         self.driver.get(page)
 
     @action_word
-    def ClearField(self, step_context):
-        """Clears the field of a selenium webelement
-
-        Arguments:
-            step_context {StepContext} -- The current step context
-        """
-
-        xpath = step_context.step_argument_1_mapped
-
-        self.Exist(step_context)
-        element = self.driver.find_element_by_xpath(xpath)
-        element.clear()
-
-    @action_word
     def Type(self, step_context):
         """Types some text to a selenium webelement
 
@@ -134,17 +120,8 @@ class SeleniumInterface(TBBaseInterface):
         xpath = step_context.step_argument_1_mapped
 
         self.Exist(step_context)
-
-        for _ in range(self.retries): # Exist sometimes fails, retry to click element
-            try:
-                element = self.driver.find_element_by_xpath(xpath)
-                element.click()
-                break
-            except WebDriverException:
-                time.sleep(float(self.implicit_wait)/self.retries)
-                continue
-        else:
-            raise Exception("Could not click on element")
+        element = self.driver.find_element_by_xpath(xpath)
+        element.click()
         
     def wait_for_element_condition(self, condition, xpath, timeout=None):
         if timeout is None: timeout = self.implicit_wait
@@ -171,7 +148,6 @@ class SeleniumInterface(TBBaseInterface):
             ])
             if condition is True:
                 break
-            time.sleep(float(self.implicit_wait)/self.retries)
         else: # If all iterations passed, but still no element
             raise Exception("Element {0} not found")
 
