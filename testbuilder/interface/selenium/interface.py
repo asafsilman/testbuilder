@@ -70,7 +70,17 @@ class SeleniumInterface(TBBaseInterface):
     @action_word
     def CloseDriver(self, step_context):
         if self.driver is not None:
-            self.driver.close()
+            for handle in self.driver.window_handles:
+                try:
+                    self.driver.switch_to.window(handle)
+                    self.driver.close()
+                except WebDriverException:
+                    continue
+            self.driver.quit()
+
+    @action_word
+    def CloseWindow(self, step_context):
+        self.driver.close()
 
     @action_word
     def Navigate(self, step_context):
