@@ -11,6 +11,7 @@ from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.common.exceptions import WebDriverException
 
 import os
+import re
 import time
 
 class SeleniumInterface(TBBaseInterface):
