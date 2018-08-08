@@ -36,6 +36,10 @@ class SampleInterface(TBBaseInterface):
     def SampleAction(self, step_context):
         return
 
+    @action_word
+    def FailAction(self, step_context):
+        raise Exception()
+
 class TestTBBaseTest(unittest.TestCase):
     def setUp(self):
         self.step_1 = TBBaseStep()
@@ -51,6 +55,19 @@ class TestTBBaseTest(unittest.TestCase):
         self.assertEqual(self.test.first_step, self.step_1, "First step is not loaded")
         self.assertEqual(self.test.current_step, self.step_1, "Current step is not loaded")
     
+    def test_get_current_iteration(self):
+        self.assertEqual(self.test.get_current_iteration(), 0)
+
+    def test_configure_next_iteration(self):
+        self.test.load_steps(self.step_1)
+        self.assertEqual(self.test.get_current_iteration(), 0)
+        
+        self.test.current_step = self.step_2
+        self.test.configure_next_iteration()
+
+        self.assertEqual(self.test.get_current_iteration(), 1)
+        self.assertEqual(self.test.current_step, self.step_1)
+
     def test_add_step_wrong(self):
         with self.assertRaises(StepException):
             self.test.load_steps(self.step_2)
@@ -172,5 +189,20 @@ class TestTBBaseTest(unittest.TestCase):
         self.test.load_middleware(SampleMiddleware)
         self.test.load_steps(step_1)
         self.test.load_tear_down_steps(step_1)
+
+        self.test.run()
+
+    def test_run_fail(self):
+        with self.assertRaises(ImproperlyConfigured):
+            self.test.run()
+        
+        step_1 = TBBaseStep(action="SampleAction")
+        step_2 = TBBaseStep(action="FailAction")
+        step_1.add_next_step(step_2)
+
+        self.test.run_test=True
+        self.test.load_interface(SampleInterface, "basic")
+        self.test.load_middleware(SampleMiddleware)
+        self.test.load_steps(step_1)
 
         self.test.run()
