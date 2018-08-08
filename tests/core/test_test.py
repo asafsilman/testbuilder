@@ -3,10 +3,9 @@ from testbuilder.core.base.basetest import TBBaseTest
 from testbuilder.core.base.basestep import TBBaseStep, StepContext
 from testbuilder.core.base.baseobjectmap import TBBaseObjectMap
 from testbuilder.core.base.basemiddleware import TBBaseMiddleware
+from testbuilder.core.base.baseinterface import TBBaseInterface, action_word
 
 from testbuilder.core.exceptions import StepException, ImproperlyConfigured
-from testbuilder.interface.basic.interface import BasicInterface
-from testbuilder.middleware.basic.middleware import BasicMiddleware
 
 from testbuilder.core.base.basetest import (
     MIDDLEWARE_MODE_AFTER_STEP,
@@ -32,14 +31,17 @@ class SampleMiddleware(TBBaseMiddleware):
     def tear_down_before_step(self, step_context):
         step_context.additional_settings["MiddlewareRun"] = "tear_down_before_step"
 
+class SampleInterface(TBBaseInterface):
+    @action_word
+    def SampleAction(self, step_context):
+        return
+
 class TestTBBaseTest(unittest.TestCase):
     def setUp(self):
         self.step_1 = TBBaseStep()
         self.step_2 = TBBaseStep()
-        self.step_3 = TBBaseStep()
 
         self.step_1.add_next_step(self.step_2)
-        self.step_2.add_next_step(self.step_3)
 
         self.test = TBBaseTest()
 
@@ -72,28 +74,28 @@ class TestTBBaseTest(unittest.TestCase):
         self.test.run_test=True
         self.assertFalse(self.test.ready())
 
-        self.test.load_interface(BasicInterface, "basic")
+        self.test.load_interface(SampleInterface, "basic")
         self.assertFalse(self.test.ready())
 
-        self.test.load_middleware(BasicMiddleware)
+        self.test.load_middleware(SampleMiddleware)
         self.assertFalse(self.test.ready())
 
         self.test.load_steps(self.step_1)
         self.assertTrue(self.test.ready())
 
     def test_load_interface(self):
-        self.test.load_interface(BasicInterface, "basic")
+        self.test.load_interface(SampleInterface, "basic")
 
         with self.assertRaises(ImproperlyConfigured):
             # Try to load middleware as interface
-            self.test.load_interface(BasicMiddleware, "basic_failure")
+            self.test.load_interface(SampleMiddleware, "basic_failure")
 
     def test_load_middleware(self):
-        self.test.load_middleware(BasicMiddleware)
+        self.test.load_middleware(SampleMiddleware)
 
         with self.assertRaises(ImproperlyConfigured):
             # Try to load interface as middleware
-            self.test.load_middleware(BasicInterface)
+            self.test.load_middleware(SampleInterface)
 
     def test_load_objectmap(self):
         object_map = TBBaseObjectMap("objectmap")
@@ -102,7 +104,7 @@ class TestTBBaseTest(unittest.TestCase):
 
         with self.assertRaises(ImproperlyConfigured):
             # Try load middleware as objectmap
-            self.test.load_object_map(BasicMiddleware(), "objectmap")
+            self.test.load_object_map(SampleMiddleware(), "objectmap")
 
     def test_run_middlewares(self):
         def create_new_context():
@@ -132,3 +134,28 @@ class TestTBBaseTest(unittest.TestCase):
         self.test.run_middlewares(step_context, MIDDLEWARE_MODE_TEARDOWN_BEFORE_STEP)
         self.assertEqual(step_context.additional_settings["MiddlewareRun"], "tear_down_before_step")
         
+    def test_execute_step(self):
+        self.test.load_interface(SampleInterface, "sample")
+
+        step_1 = TBBaseStep(action="SampleAction")
+        step_2 = TBBaseStep(action="SampleActionFail")
+
+        step_1.add_next_step(step_2)
+
+        c_x = StepContext(self.test); c_x.update_context(step_1, c_x)
+        self.test.execute_step(c_x) # No interface defined
+
+        c_x = StepContext(self.test); c_x.update_context(step_1, c_x)
+        c_x.action_interface = "sample"
+        self.test.execute_step(c_x) # Interface defined
+
+        # Interface defined, but not installed
+        with self.assertRaises(ImproperlyConfigured):
+            c_x = StepContext(self.test); c_x.update_context(step_1, c_x)
+            c_x.action_interface = "sample_fail"
+            self.test.execute_step(c_x)
+
+        # Action not defined
+        with self.assertRaises(ImproperlyConfigured):
+            c_x = StepContext(self.test); c_x.update_context(step_2, c_x)
+            self.test.execute_step(c_x)
