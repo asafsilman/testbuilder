@@ -48,15 +48,25 @@ class TestTBBaseTest(unittest.TestCase):
 
         self.assertEqual(self.test.first_step, self.step_1, "First step is not loaded")
         self.assertEqual(self.test.current_step, self.step_1, "Current step is not loaded")
+    
+    def test_add_step_wrong(self):
+        with self.assertRaises(StepException):
+            self.test.load_steps(self.step_2)
+
+        with self.assertRaises(TypeError):
+            self.test.load_steps(None)
 
     def test_add_tear_down_steps(self):
         self.test.load_tear_down_steps(self.step_1)
 
         self.assertEqual(self.test.tear_down_first_step, self.step_1, "First step is not loaded")
-    
-    def test_add_step_wrong(self):
+
+    def test_add_tear_down_steps_wrong(self):
         with self.assertRaises(StepException):
-            self.test.load_steps(self.step_2)
+            self.test.load_tear_down_steps(self.step_2)
+
+        with self.assertRaises(TypeError):
+            self.test.load_tear_down_steps(None)
 
     def test_ready(self):
         self.test.run_test=True
