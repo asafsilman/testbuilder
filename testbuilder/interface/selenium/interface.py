@@ -11,6 +11,8 @@ from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.common.exceptions import WebDriverException
 
 import os
+import re
+import time
 
 class SeleniumInterface(TBBaseInterface):
     def __init__(self):
@@ -69,7 +71,17 @@ class SeleniumInterface(TBBaseInterface):
     @action_word
     def CloseDriver(self, step_context):
         if self.driver is not None:
-            self.driver.close()
+            for handle in self.driver.window_handles:
+                try:
+                    self.driver.switch_to.window(handle)
+                    self.driver.close()
+                except WebDriverException:
+                    continue
+            self.driver.quit()
+
+    @action_word
+    def CloseWindow(self, step_context):
+        self.driver.close()
 
     @action_word
     def Navigate(self, step_context):
@@ -185,3 +197,18 @@ class SeleniumInterface(TBBaseInterface):
         self.set_implicit_wait(temp_wait)
 
         step_context.step.result = condition
+
+    @action_word
+    def SwitchWindow(self, step_context):
+        window_pattern = step_context.step_argument_1
+        for _ in range(self.retries):
+            for handle in self.driver.window_handles:
+                try:
+                    self.driver.switch_to.window(handle)
+                    if re.match(window_pattern, self.driver.title):
+                        return
+                except WebDriverException:
+                    continue
+            time.sleep(self.implicit_wait)
+        else:
+            raise Exception(f"Could not switch to window with pattern {window_pattern}")
