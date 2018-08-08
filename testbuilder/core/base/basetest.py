@@ -133,6 +133,8 @@ class TBBaseTest:
         Arguments:
             interface {TBBaseInterface} -- Class of TBBaseInterface, **not instance of**
             interface_name {String} -- Name of the interface
+        Raises:
+            ImproperlyConfigured -- Raised if interface not of subclass TBBaseInterface
         """
 
         if not issubclass(interface, TBBaseInterface):
