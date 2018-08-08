@@ -71,6 +71,8 @@ class TestTBBaseTest(unittest.TestCase):
             self.test.load_tear_down_steps(None)
 
     def test_ready(self):
+        self.assertFalse(self.test.ready())
+
         self.test.run_test=True
         self.assertFalse(self.test.ready())
 
@@ -159,3 +161,16 @@ class TestTBBaseTest(unittest.TestCase):
         with self.assertRaises(ImproperlyConfigured):
             c_x = StepContext(self.test); c_x.update_context(step_2, c_x)
             self.test.execute_step(c_x)
+
+    def test_run(self):
+        step_1 = TBBaseStep(action="SampleAction")
+        step_2 = TBBaseStep(action="SampleAction")
+        step_1.add_next_step(step_2)
+
+        self.test.run_test=True
+        self.test.load_interface(SampleInterface, "basic")
+        self.test.load_middleware(SampleMiddleware)
+        self.test.load_steps(step_1)
+        self.test.load_tear_down_steps(step_1)
+
+        self.test.run()
