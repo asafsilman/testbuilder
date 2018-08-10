@@ -107,6 +107,11 @@ class SeleniumInterface(TBBaseInterface):
 
         self.Exist(step_context)
         element = self.driver.find_element_by_xpath(xpath)
+        
+        prefix,_,key = text.partition(".") # Map Special keys
+        if prefix == "$Keys":
+            text = getattr(keys.Keys, key)
+
         element.send_keys(text)
 
     @action_word
@@ -120,8 +125,17 @@ class SeleniumInterface(TBBaseInterface):
         xpath = step_context.step_argument_1_mapped
 
         self.Exist(step_context)
-        element = self.driver.find_element_by_xpath(xpath)
-        element.click()
+        
+        for _ in range(self.retries): # Exist sometimes fails, retry to click element
+            try:
+                element = self.driver.find_element_by_xpath(xpath)
+                element.click()
+                break
+            except WebDriverException:
+                time.sleep(float(self.implicit_wait)/self.retries)
+                continue
+        else:
+            raise Exception("Could not click on element")
         
     def wait_for_element_condition(self, condition, xpath, timeout=None):
         if timeout is None: timeout = self.implicit_wait
