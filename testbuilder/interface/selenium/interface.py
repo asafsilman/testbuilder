@@ -115,6 +115,20 @@ class SeleniumInterface(TBBaseInterface):
         element.send_keys(text)
 
     @action_word
+    def ClearField(self, step_context):
+        """Clears the field of a selenium webelement
+
+        Arguments:
+            step_context {StepContext} -- The current step context
+        """
+
+        xpath = step_context.step_argument_1_mapped
+
+        self.Exist(step_context)
+        element = self.driver.find_element_by_xpath(xpath)
+        element.clear()
+
+    @action_word
     def Click(self, step_context):
         """Clicks a selenium webelement
         
@@ -163,7 +177,7 @@ class SeleniumInterface(TBBaseInterface):
             if condition is True:
                 break
         else: # If all iterations passed, but still no element
-            raise Exception("Element {0} not found")
+            raise Exception("Element {0} not found".format(step_context.step_argument_1))
 
     @action_word
     def ExistFormatted(self, step_context):
