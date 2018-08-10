@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="testbuilder",
-    version="0.2.3",
+    version="0.2.31",
     packages=find_packages(),
     description="A python testing framework for frontend testing",
 
