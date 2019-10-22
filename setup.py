@@ -12,7 +12,7 @@ setup(
 
     install_requires=[
         "click==6.7",
-        "PyYAML==3.13",
+        "PyYAML==5.1",
         "pandas==0.23.3",
         "selenium==3.13.0"
     ],
