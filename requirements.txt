@@ -17,5 +17,5 @@ PyYAML==5.4
 requests==2.32.4
 selenium==3.13.0
 six==1.11.0
-urllib3==2.6.3
+urllib3==2.7.0
 wrapt==1.10.11
